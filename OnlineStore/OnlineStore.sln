@@ -21,9 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineStore.Api", "OnlineSt
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F248FC65-3961-4C7E-AC26-D97893402EDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineStore.Application.Tests", "OnlineStore.Application.Tests\OnlineStore.Application.Tests.csproj", "{B040DB6C-AEFA-46CA-9707-E30B7BA4E6F8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineStore.Application.Tests", "Tests\OnlineStore.Application.Tests\OnlineStore.Application.Tests.csproj", "{B040DB6C-AEFA-46CA-9707-E30B7BA4E6F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineStore.Api.Tests", "OnlineStore.Api.Tests\OnlineStore.Api.Tests.csproj", "{4B47AFC3-140C-41F0-877D-089FD929DA81}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineStore.Api.Tests", "Tests\OnlineStore.Api.Tests\OnlineStore.Api.Tests.csproj", "{4B47AFC3-140C-41F0-877D-089FD929DA81}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
