@@ -1,4 +1,4 @@
-﻿namespace OnlineStore.Domain.Result;
+﻿namespace OnlineStore.Application.Result;
 
 public class CollectionResult<T> : BaseResult<IEnumerable<T>>
 {
