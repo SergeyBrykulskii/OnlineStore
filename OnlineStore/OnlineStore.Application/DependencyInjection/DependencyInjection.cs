@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
+using OnlineStore.Application.Mapping;
 
 namespace OnlineStore.Application.DependencyInjection;
 
@@ -11,5 +13,7 @@ public static class DependencyInjection
 
     private static void InitServices(this IServiceCollection services)
     {
+        services.AddAutoMapper(typeof(CategoryProfile), 
+                               typeof(ProductProfile));
     }
 }
