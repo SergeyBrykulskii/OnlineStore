@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using OnlineStore.Application.DTOs;
+using OnlineStore.Application.DTOs.OrderDTOs;
 using OnlineStore.Domain.Entities;
 
 namespace OnlineStore.Application.Mapping;
