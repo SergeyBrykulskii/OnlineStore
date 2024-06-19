@@ -1,6 +1,6 @@
 ﻿namespace OnlineStore.Application.DTOs;
 
-//Dto for obtaining information about all products/ products by specific category
+//Dto for obtaining information about all products/products by specific category
 public class ProductDto
 {
     public long Id { get; set; }
