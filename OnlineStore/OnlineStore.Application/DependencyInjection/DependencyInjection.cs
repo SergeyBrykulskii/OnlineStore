@@ -14,6 +14,7 @@ public static class DependencyInjection
     private static void InitServices(this IServiceCollection services)
     {
         services.AddAutoMapper(typeof(CategoryProfile), 
-                               typeof(ProductProfile));
+                               typeof(ProductProfile),
+                               typeof(OrderProfile));
     }
 }
