@@ -2,11 +2,6 @@
 using OnlineStore.DAL.ApplicationDbContext;
 using OnlineStore.DAL.Repositories.interfaces;
 using OnlineStore.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineStore.DAL.Repositories.repositories
 {
@@ -44,10 +39,7 @@ namespace OnlineStore.DAL.Repositories.repositories
 
         public async Task<Order> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
-            var query = _context.Orders.Include(o => o.OrderProducts).AsQueryable();
-
-            query = query.Where(el => el.Id == id);
-
+            var query = _context.Orders.Include(o => o.OrderProducts).AsQueryable().Where(el => el.Id == id);
             return await query.FirstOrDefaultAsync();
         }
 

@@ -9,22 +9,22 @@ namespace OnlineStore.DAL.EntitiesConfiguration
         public void Configure(EntityTypeBuilder<Product> builder)
         {
 
-            builder.ToTable("Products"); 
+            builder.ToTable("Products");
 
-            builder.HasKey(p => p.Id); 
+            builder.HasKey(p => p.Id);
 
             builder.Property(p => p.Name)
                 .IsRequired()
-                .HasMaxLength(100); 
+                .HasMaxLength(100);
 
             builder.Property(p => p.Description)
-                .HasMaxLength(500); 
+                .HasMaxLength(500);
 
             builder.Property(p => p.Price)
-                .IsRequired(); 
+                .IsRequired();
 
             builder.Property(p => p.CategoryId)
-                .IsRequired(); 
+                .IsRequired();
         }
     }
 }

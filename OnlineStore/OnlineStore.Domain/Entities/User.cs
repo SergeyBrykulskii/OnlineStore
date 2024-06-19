@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using OnlineStore.Domain.Interfaces.Entities;
 
 namespace OnlineStore.Domain.Entities;
 

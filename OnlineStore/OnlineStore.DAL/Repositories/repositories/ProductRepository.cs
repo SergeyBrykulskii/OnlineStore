@@ -2,18 +2,14 @@
 using OnlineStore.DAL.ApplicationDbContext;
 using OnlineStore.DAL.Repositories.interfaces;
 using OnlineStore.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineStore.DAL.Repositories.repositories
 {
-    public class ProductRepository:IProductRepository
+    public class ProductRepository : IProductRepository
     {
         private readonly AppDbContext _context;
-        public ProductRepository(AppDbContext context) {
+        public ProductRepository(AppDbContext context)
+        {
             _context = context;
         }
 
@@ -43,10 +39,7 @@ namespace OnlineStore.DAL.Repositories.repositories
 
         public async Task<Product> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
-            var query = _context.Products.AsQueryable();
-
-            query = query.Where(el => el.Id == id);
-
+            var query = _context.Products.AsQueryable().Where(el => el.Id == id);
             return await query.FirstOrDefaultAsync();
         }
 
@@ -76,7 +69,7 @@ namespace OnlineStore.DAL.Repositories.repositories
             oldProduct.Description = newProduct.Description;
             oldProduct.Price = newProduct.Price;
             oldProduct.CategoryId = newProduct.CategoryId;
-            
+
         }
     }
 }

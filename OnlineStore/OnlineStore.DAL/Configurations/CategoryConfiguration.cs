@@ -1,11 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using OnlineStore.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineStore.DAL.EntitiesConfiguration
 {
@@ -13,13 +8,13 @@ namespace OnlineStore.DAL.EntitiesConfiguration
     {
         public void Configure(EntityTypeBuilder<Category> builder)
         {
-            builder.ToTable("Categories"); 
+            builder.ToTable("Categories");
 
-            builder.HasKey(c => c.Id); 
+            builder.HasKey(c => c.Id);
 
             builder.Property(c => c.Name)
                 .IsRequired()
-                .HasMaxLength(100); 
+                .HasMaxLength(100);
 
         }
     }
