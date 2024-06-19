@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using OnlineStore.DAL.EntitiesConfiguration;
+using OnlineStore.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +9,25 @@ using System.Threading.Tasks;
 
 namespace OnlineStore.DAL.ApplicationDbContext
 {
-    internal class AppDbContext
+    public class AppDbContext:DbContext
     {
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) {}
+
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderProduct> OrderProducts { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+
+            modelBuilder.ApplyConfiguration(new ProductConfiguration());
+            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderProductConfiguration());
+
+            base.OnModelCreating(modelBuilder);
+        }
+
     }
 }

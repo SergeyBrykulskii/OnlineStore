@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OnlineStore.DAL.EntitiesConfiguration
+namespace OnlineStore.DAL.Configurations
 {
-    internal class CategoryConfiguration
+    internal class UserConfiguration
     {
+
     }
 }

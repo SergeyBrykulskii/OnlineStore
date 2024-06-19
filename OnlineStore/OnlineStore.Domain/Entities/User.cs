@@ -1,12 +1,10 @@
-﻿using OnlineStore.Domain.Interfaces.Entities;
+﻿using Microsoft.AspNetCore.Identity;
+using OnlineStore.Domain.Interfaces.Entities;
 
 namespace OnlineStore.Domain.Entities;
 
-public class User : IEntity
+public class User : IdentityUser<Guid>
 {
-    public long Id { get; set; }
     public string Name { get; set; }
-    public string Email { get; set; }
-    public string PasswordHash { get; set; }
     public List<Order>? Orders { get; set; }
 }
