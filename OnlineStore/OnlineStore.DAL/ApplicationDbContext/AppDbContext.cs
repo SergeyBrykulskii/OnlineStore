@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OnlineStore.DAL.EntitiesConfiguration;
 using OnlineStore.Domain.Entities;
+using System.Reflection;
 
 namespace OnlineStore.DAL.ApplicationDbContext
 {
@@ -17,10 +18,7 @@ namespace OnlineStore.DAL.ApplicationDbContext
         {
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ProductConfiguration).Assembly);
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(CategoryConfiguration).Assembly);
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(OrderConfiguration).Assembly);
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(OrderProductConfiguration).Assembly);
-
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             base.OnModelCreating(modelBuilder);
         }
 

@@ -21,6 +21,11 @@ namespace OnlineStore.DAL.EntitiesConfiguration
              .WithMany(p => p.Orders)
              .HasForeignKey(p => p.UserId)
              .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(c => c.OrderProducts)
+               .WithOne()
+               .HasForeignKey(op => op.OrderId)
+               .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

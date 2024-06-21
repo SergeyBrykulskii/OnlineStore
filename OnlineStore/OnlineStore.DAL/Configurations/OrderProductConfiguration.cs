@@ -20,9 +20,14 @@ namespace OnlineStore.DAL.EntitiesConfiguration
             builder.Property(op => op.Quantity)
                 .IsRequired();
 
-            //builder.HasOne(op => op.Product)
-            //.WithOne(p => p.)
-            //.HasForeignKey(op => op.ProductId);
+            builder.HasOne(op => op.Product)
+            .WithOne()
+            .HasForeignKey<OrderProduct>(op => op.ProductId);
+
+            //builder.HasOne()
+            //     .WithMany(c => c.OrderProducts)
+            //     .HasForeignKey(p => p.OrderId)
+            //     .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
