@@ -6,5 +6,5 @@ public interface IOrderProductService
     public Task AddProductToOrderAsync(OrderProductDto orderProductItem);
     public Task UpdateProductQuantityInOrderAsync(OrderProductDto orderProductItem);
     public Task RemoveProductFromOrderAsync(long Id);
-    public Task<OrderProductDto> GetProductsByOrder(long OrderId);
+    public Task<List<OrderProductDto>> GetProductsByOrder(long OrderId);
 }

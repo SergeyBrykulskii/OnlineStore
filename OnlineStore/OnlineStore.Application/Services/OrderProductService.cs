@@ -41,13 +41,13 @@ public class OrderProductService: IOrderProductService
         await _orderProductRepository.DeleteAsync(orderProduct);
     }
 
-    public async Task<OrderProductDto> GetProductsByOrder(long OrderId)
+    public async Task<List<OrderProductDto>> GetProductsByOrder(long OrderId)
     {
         var order = await _orderRepository.GetByIdAsync(OrderId);
         if (order == null)
             throw new Exception($"Order with id = {OrderId} was not found");
         var productsInOrderResult = await _orderProductRepository.GetByOrder(order);
-        var productsInOrder = _mapper.Map<OrderProductDto>(productsInOrderResult);
+        var productsInOrder = _mapper.Map<List<OrderProductDto>>(productsInOrderResult.ToList());
         return productsInOrder;
     }
 }
