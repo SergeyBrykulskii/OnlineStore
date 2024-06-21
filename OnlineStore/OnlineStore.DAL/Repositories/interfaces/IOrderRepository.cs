@@ -2,9 +2,9 @@
 
 namespace OnlineStore.DAL.Repositories.interfaces
 {
-    public interface IOrderRepository
+    public interface IOrderRepository: IRepository<Order>
     {
-        Task<IEnumerable<Order>> GetAllByUser(User user, CancellationToken cancellationToken);
-        Task<Order> GetByIdAsync(int id, CancellationToken cancellationToken);
+        Task<IEnumerable<Order>> GetAllByUser(User user, CancellationToken cancellationToken = default);
+        Task<Order> GetByIdAsync(long id, CancellationToken cancellationToken = default);
     }
 }

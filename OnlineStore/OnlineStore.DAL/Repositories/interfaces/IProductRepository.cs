@@ -2,9 +2,9 @@
 
 namespace OnlineStore.DAL.Repositories.interfaces
 {
-    public interface IProductRepository
+    public interface IProductRepository: IRepository<Product>
     {
-        Task<IEnumerable<Product>> GetByCategory(Category category, CancellationToken cancellationToken);
-        Task<Product> GetByIdAsync(int id, CancellationToken cancellationToken);
+        Task<IEnumerable<Product>> GetByCategory(Category category, CancellationToken cancellationToken = default);
+        Task<Product> GetByIdAsync(long id, CancellationToken cancellationToken = default);
     }
 }

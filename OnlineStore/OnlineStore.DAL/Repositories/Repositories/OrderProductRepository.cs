@@ -1,16 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OnlineStore.DAL.ApplicationDbContext;
+using OnlineStore.DAL.Repositories.interfaces;
 using OnlineStore.DAL.Repositories.repositories;
 using OnlineStore.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace OnlineStore.DAL.Repositories.Repositories
 {
-    public class OrderProductRepository:BaseRepository<OrderProduct>
+    public class OrderProductRepository:BaseRepository<OrderProduct>,IOrderProductRepository
     {
         private readonly AppDbContext _context;
         public OrderProductRepository(AppDbContext context) : base(context)
@@ -18,7 +15,7 @@ namespace OnlineStore.DAL.Repositories.Repositories
             _context = context;
         }
 
-        public async Task<OrderProduct> GetByIdAsync(int id, CancellationToken cancellationToken)
+        public async Task<OrderProduct> GetByIdAsync(long id, CancellationToken cancellationToken)
         {
             var query = _context.OrderProducts.AsNoTracking().AsQueryable().Where(el => el.Id == id);
             return await query.FirstOrDefaultAsync(cancellationToken);
