@@ -16,8 +16,6 @@ namespace OnlineStore.DAL.ApplicationDbContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ProductConfiguration).Assembly);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             base.OnModelCreating(modelBuilder);
         }
