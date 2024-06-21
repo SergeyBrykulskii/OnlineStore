@@ -29,11 +29,11 @@ namespace OnlineStore.DAL.Repositories.repositories
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public override bool DeleteAsync(T entity, CancellationToken cancellationToken)
+        public override bool Delete(T entity, CancellationToken cancellationToken)
         {
             _dbSet.Remove(entity);
-            var deletedRows = 
-            return  > 0;
+            var deletedRows = _context.SaveChanges();
+            return deletedRows > 0;
         }
 
         public override async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> filters, CancellationToken cancellationToken)
@@ -59,14 +59,16 @@ namespace OnlineStore.DAL.Repositories.repositories
             return await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public override Task UpdateAsync(T entity, CancellationToken cancellationToken)
+        public override bool Update(T entity, CancellationToken cancellationToken)
         {
             _dbSet.Update(entity);
+            var updatedRows = _context.SaveChanges();
+            return updatedRows > 0;
         }
 
         private IQueryable<T> Include(params Expression<Func<T, object>>[] includeProperties)
         {
-            IQueryable<T> query = _dbSet.AsNoTracking();
+            IQueryable<T> query = _dbSet;
             return includeProperties
                 .Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
         }

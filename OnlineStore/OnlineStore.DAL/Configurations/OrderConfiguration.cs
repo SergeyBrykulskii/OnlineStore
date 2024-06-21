@@ -8,23 +8,19 @@ namespace OnlineStore.DAL.EntitiesConfiguration
     {
         public void Configure(EntityTypeBuilder<Order> builder)
         {
-            builder.ToTable("Orders");
-
+           
             builder.HasKey(o => o.Id);
 
             builder.Property(o => o.CreatedAt)
                 .IsRequired();
 
-            //builder.HasMany(o => o.OrderProducts)
-            //    .WithOne(op => op.Order)
-            //    .HasForeignKey(op => op.OrderId); 
-
             builder.Property(o => o.UserId)
                 .IsRequired();
 
-            //builder.HasOne(o => o.User)
-            //    .WithMany()
-            //    .HasForeignKey(o => o.UserId); 
+            builder.HasOne(c => c.User)
+             .WithMany(p => p.Orders)
+             .HasForeignKey(p => p.UserId)
+             .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

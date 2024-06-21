@@ -8,7 +8,6 @@ namespace OnlineStore.DAL.EntitiesConfiguration
     {
         public void Configure(EntityTypeBuilder<OrderProduct> builder)
         {
-            builder.ToTable("OrderProducts");
 
             builder.HasKey(op => op.Id);
 
@@ -20,6 +19,10 @@ namespace OnlineStore.DAL.EntitiesConfiguration
 
             builder.Property(op => op.Quantity)
                 .IsRequired();
+
+            builder.HasOne(op => op.Product)
+            .WithOne(p => p.)
+            .HasForeignKey(op => op.ProductId);
         }
     }
 }
