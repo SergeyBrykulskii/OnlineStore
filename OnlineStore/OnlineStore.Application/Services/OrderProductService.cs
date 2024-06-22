@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using OnlineStore.Application.DTOs.OrderProductDTOs;
 using OnlineStore.Application.Result;
 using OnlineStore.DAL.Repositories.interfaces;
@@ -10,28 +11,43 @@ public class OrderProductService: IOrderProductService
     private readonly IOrderProductRepository _orderProductRepository;
     private readonly IOrderRepository _orderRepository;
     private readonly IMapper _mapper;
-    public OrderProductService(IOrderProductRepository orderProductRepository, IOrderRepository orderRepository, IMapper mapper)
+    private readonly IValidator<CreateOrderProductDto> _createOrderProductDtoValidator;
+    private readonly IValidator<UpdateOrderProductDto> _updateOrderProductDtoValidator;
+    public OrderProductService(IOrderProductRepository orderProductRepository, IOrderRepository orderRepository, IMapper mapper,
+        IValidator<UpdateOrderProductDto> updateOrderProductDtoValidator, IValidator<CreateOrderProductDto> createOrderProductDtoValidator)
+	{
+		_orderProductRepository = orderProductRepository;
+		_orderRepository = orderRepository;
+		_mapper = mapper;
+        _createOrderProductDtoValidator = createOrderProductDtoValidator;
+		_updateOrderProductDtoValidator = updateOrderProductDtoValidator;
+	}
+	public async Task<BaseResult<CreateOrderProductDto>> AddProductToOrderAsync(CreateOrderProductDto orderProductItem)
     {
-        _orderProductRepository = orderProductRepository;
-        _orderRepository = orderRepository;
-        _mapper = mapper;
-    }
-    public async Task<BaseResult<OrderProductDto>> AddProductToOrderAsync(OrderProductDto orderProductItem)
-    {
-        var orderProduct = _mapper.Map<OrderProduct>(orderProductItem);
+		var validationResult = await _createOrderProductDtoValidator.ValidateAsync(orderProductItem);
+		if (validationResult.Errors.Count != 0)
+		{
+			return new BaseResult<CreateOrderProductDto> { ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage };
+		}
+		var orderProduct = _mapper.Map<OrderProduct>(orderProductItem);
         await _orderProductRepository.CreateAsync(orderProduct);
-        return new BaseResult<OrderProductDto> { Data = orderProductItem };
+        return new BaseResult<CreateOrderProductDto> { Data = orderProductItem };
     }
-    public async Task<BaseResult<OrderProductDto>> UpdateProductQuantityInOrderAsync(OrderProductDto orderProductItem)
+    public async Task<BaseResult<UpdateOrderProductDto>> UpdateProductQuantityInOrderAsync(UpdateOrderProductDto orderProductItem)
     {
-        var orderProductById = await _orderProductRepository.GetByIdAsync(orderProductItem.Id);
+		var validationResult = await _updateOrderProductDtoValidator.ValidateAsync(orderProductItem);
+		if (validationResult.Errors.Count != 0)
+		{
+			return new BaseResult<UpdateOrderProductDto> { ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage };
+		}
+		var orderProductById = await _orderProductRepository.GetByIdAsync(orderProductItem.Id);
         if(orderProductById == null)
         {
-            return new BaseResult<OrderProductDto> { ErrorMessage = "Order product not found" };
+            return new BaseResult<UpdateOrderProductDto> { ErrorMessage = "Order product not found" };
         }
         var orderProductUpdated = _mapper.Map<OrderProduct>(orderProductItem);
         await _orderProductRepository.UpdateAsync(orderProductUpdated);
-        return new BaseResult<OrderProductDto> { Data = orderProductItem };
+        return new BaseResult<UpdateOrderProductDto> { Data = orderProductItem };
     }
 
     public async Task<BaseResult<long>> RemoveProductFromOrderAsync(long Id)

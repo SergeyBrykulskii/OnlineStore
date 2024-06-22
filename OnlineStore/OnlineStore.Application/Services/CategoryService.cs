@@ -1,4 +1,5 @@
 using AutoMapper;
+using FluentValidation;
 using OnlineStore.Application.DTOs.CategoryDTOs;
 using OnlineStore.Application.Result;
 using OnlineStore.DAL.Repositories.interfaces;
@@ -10,11 +11,16 @@ public class CategoryService : ICategoryService
 {
     private readonly ICategoryRepository _categoryRepository;
     private readonly IMapper _mapper; 
+    private readonly IValidator<CreateCategoryDto> _createCategoryDtoValidator;
+    private readonly IValidator<UpdateCategoryDto> _updateCategoryDtoValidator;
 
-    public CategoryService(ICategoryRepository categoryRepository, IMapper mapper)
+    public CategoryService(ICategoryRepository categoryRepository, IMapper mapper,
+        IValidator<CreateCategoryDto> createCategoryDtoValidator, IValidator<UpdateCategoryDto> updateCategoryDtoValidator)
     {
         _categoryRepository = categoryRepository;
         _mapper = mapper;
+        _createCategoryDtoValidator = createCategoryDtoValidator;
+        _updateCategoryDtoValidator = updateCategoryDtoValidator;
     }
 
     public async Task<CollectionResult<CategoryDto>> GetAllCategoriesAsync()
@@ -37,6 +43,11 @@ public class CategoryService : ICategoryService
 
     public async Task<BaseResult<CreateCategoryDto>> CreateCategoryAsync(CreateCategoryDto categoryDto)
     {
+        var validationResult = await _createCategoryDtoValidator.ValidateAsync(categoryDto);
+        if (validationResult.Errors.Count != 0)
+        {
+            return new BaseResult<CreateCategoryDto> { ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage };
+        }
         var category = _mapper.Map<Category>(categoryDto);
         await _categoryRepository.CreateAsync(category);
         return new BaseResult<CreateCategoryDto> { Data = categoryDto };
@@ -44,6 +55,11 @@ public class CategoryService : ICategoryService
 
     public async Task<BaseResult<UpdateCategoryDto>> UpdateCategoryAsync(UpdateCategoryDto categoryDto)
     {
+        var validationResult = await _updateCategoryDtoValidator.ValidateAsync(categoryDto);
+        if (validationResult.Errors.Count != 0)
+        {
+            return new BaseResult<UpdateCategoryDto> { ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage };
+        }
         var categoryById = await _categoryRepository.GetByIdAsync(categoryDto.Id);
         if (categoryById == null)
         {

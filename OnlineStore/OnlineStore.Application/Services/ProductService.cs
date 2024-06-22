@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
+using FluentValidation;
+using OnlineStore.Application.DTOs.OrderProductDTOs;
 using OnlineStore.Application.DTOs.ProductDTOs;
 using OnlineStore.Application.Result;
+using OnlineStore.Application.Validations.OrderProductsDTOsValidators;
 using OnlineStore.DAL.Repositories.interfaces;
 using OnlineStore.Domain.Entities;
 
@@ -11,15 +14,25 @@ public class ProductService: IProductService
 	private readonly IProductRepository _productRepository;
 	private readonly ICategoryRepository _categoryRepository;
 	private readonly IMapper _mapper;
+	private readonly IValidator<CreateProductDto> _createProductDtoValidator;
+	private readonly IValidator<UpdateProductDto> _updateProductDtoValidator;
 
-	public ProductService(IProductRepository productRepository,ICategoryRepository categoryRepository, IMapper mapper)
+	public ProductService(IProductRepository productRepository,ICategoryRepository categoryRepository, IMapper mapper, 
+		IValidator<UpdateProductDto> updateProductDtoValidator, IValidator<CreateProductDto> createProductDtoValidator)
 	{
 		_productRepository = productRepository;
 		_categoryRepository = categoryRepository;
 		_mapper = mapper;
+		_createProductDtoValidator = createProductDtoValidator;
+		_updateProductDtoValidator = updateProductDtoValidator;
 	}
 
 	public async Task<BaseResult<CreateProductDto>> CreateProductAsync(CreateProductDto productDto) {
+		var validationResult = await _createProductDtoValidator.ValidateAsync(productDto);
+		if (validationResult.Errors.Count != 0)
+		{
+			return new BaseResult<CreateProductDto> { ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage };
+		}
 		var product = _mapper.Map<Product>(productDto);
 		await _productRepository.CreateAsync(product);
 		return new BaseResult<CreateProductDto> { Data = productDto };
@@ -56,6 +69,11 @@ public class ProductService: IProductService
 	}
 	public async Task<BaseResult<UpdateProductDto>> UpdateProductAsync(UpdateProductDto productDto)
 	{
+		var validationResult = await _updateProductDtoValidator.ValidateAsync(productDto);
+		if (validationResult.Errors.Count != 0)
+		{
+			return new BaseResult<UpdateProductDto> { ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage };
+		}
 		var productById = await _productRepository.GetByIdAsync(productDto.Id);
 		if (productById == null)
 		{
