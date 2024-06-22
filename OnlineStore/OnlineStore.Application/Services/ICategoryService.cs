@@ -1,13 +1,13 @@
 using OnlineStore.Application.DTOs.CategoryDTOs;
-using OnlineStore.Domain.Entities;
+using OnlineStore.Application.Result;
 
 namespace OnlineStore.Application.Services;
 
 public interface ICategoryService
 {
-    Task<List<CategoryDto>> GetAllCategoriesAsync(CancellationToken cancellationToken);
-    Task<CategoryDto> GetCategoryByIdAsync(long id);
-    Task<CategoryDto> CreateCategoryAsync(CreateCategoryDto categoryDto);
-    Task<bool> UpdateCategoryAsync(CategoryDto categoryDto);
-    Task<bool> DeleteCategoryAsync(long id);
+    public Task<CollectionResult<CategoryDto>> GetAllCategoriesAsync();
+    public Task<BaseResult<CategoryDto>> GetCategoryByIdAsync(long id);
+    public Task<BaseResult<CreateCategoryDto>> CreateCategoryAsync(CreateCategoryDto categoryDto);
+    public Task<BaseResult<UpdateCategoryDto>> UpdateCategoryAsync(UpdateCategoryDto categoryDto);
+    public Task<BaseResult<long>> DeleteCategoryAsync(long id);
 }

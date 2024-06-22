@@ -3,7 +3,7 @@ using OnlineStore.DAL.ApplicationDbContext;
 using OnlineStore.DAL.Repositories.interfaces;
 using OnlineStore.Domain.Entities;
 
-namespace OnlineStore.DAL.Repositories.repositories
+namespace OnlineStore.DAL.Repositories.Repositories
 {
     public class ProductRepository : BaseRepository<Product>,IProductRepository
     {
@@ -13,7 +13,7 @@ namespace OnlineStore.DAL.Repositories.repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Product>> GetByCategory(Category category, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<Product>> GetByCategoryAsync(Category category, CancellationToken cancellationToken = default)
         {
             return await _context.Products.AsNoTracking().Include(c => c.Category)
                                   .Where(p => p.CategoryId == category.Id)

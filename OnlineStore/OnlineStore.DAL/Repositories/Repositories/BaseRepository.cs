@@ -4,7 +4,7 @@ using OnlineStore.DAL.Repositories.interfaces;
 using System.Linq.Expressions;
 
 
-namespace OnlineStore.DAL.Repositories.repositories
+namespace OnlineStore.DAL.Repositories.Repositories
 {
     public class BaseRepository<T> : IRepository<T> where T : class
     {
