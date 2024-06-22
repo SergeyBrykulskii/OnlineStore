@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OnlineStore.DAL.Repositories.Interfaces
+namespace OnlineStore.DAL.Repositories.interfaces
 {
-    public interface IOrderProductRepository
+    public interface IOrderProductRepository: IRepository<OrderProduct>
     {
-        Task<OrderProduct> GetByIdAsync(int id, CancellationToken cancellationToken);
-        Task<IEnumerable<OrderProduct>> GetByOrder(Order order, CancellationToken cancellationToken);
+        Task<OrderProduct> GetByIdAsync(long id, CancellationToken cancellationToken = default);
+        Task<IEnumerable<OrderProduct>> GetByOrder(Order order, CancellationToken cancellationToken = default);
     }
 }

@@ -13,7 +13,7 @@ namespace OnlineStore.DAL.Repositories.repositories
             _context = context;
         }
 
-        public async Task<Category> GetByIdAsync(int id, CancellationToken cancellationToken)
+        public async Task<Category> GetByIdAsync(long id, CancellationToken cancellationToken = default)
         {
             var query = _context.Categories.AsNoTracking().AsQueryable().Where(el => el.Id == id);
             return await query.FirstOrDefaultAsync(cancellationToken);

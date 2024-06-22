@@ -1,4 +1,4 @@
-﻿namespace OnlineStore.Application.DTOs;
+﻿namespace OnlineStore.Application.DTOs.CategoryDTOs;
 
 public class UpdateCategoryDto
 {
