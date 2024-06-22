@@ -1,14 +1,15 @@
 using OnlineStore.Application.DTOs.OrderDTOs;
+using OnlineStore.Application.Result;
 using OnlineStore.Domain.Entities;
 
 namespace OnlineStore.Application.Services;
 
 public interface IOrderService
 {
-    Task<List<OrderDto>> GetAllOrdersAsync(CancellationToken cancellationToken);
-    Task<List<OrderDto>> GetAllOrdersByUserAsync(User user);
-    Task<OrderDetailDto> GetOrderByIdAsync(long id);
-    Task<OrderDto> CreateOrderAsync(CreateOrderDto orderDto);
-    Task<bool> UpdateOrderAsync(OrderDto orderDto);
-    Task<bool> DeleteOrderAsync(long id);
+    public Task<CollectionResult<OrderDto>> GetAllOrdersAsync();
+    public Task<CollectionResult<OrderDto>> GetAllOrdersByUserAsync(User user);
+    public Task<BaseResult<OrderDetailDto>> GetOrderByIdAsync(long id);
+    public Task<BaseResult<CreateOrderDto>> CreateOrderAsync(CreateOrderDto orderDto);
+    public Task<BaseResult<OrderDto>> UpdateOrderAsync(OrderDto orderDto);
+    public Task<BaseResult<long>> DeleteOrderAsync(long id);
 }

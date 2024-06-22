@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using OnlineStore.Application.DTOs.OrderProductDTOs;
+using OnlineStore.Application.Result;
 using OnlineStore.DAL.Repositories.interfaces;
 using OnlineStore.Domain.Entities;
 
@@ -15,39 +16,44 @@ public class OrderProductService: IOrderProductService
         _orderRepository = orderRepository;
         _mapper = mapper;
     }
-    public async Task AddProductToOrderAsync(OrderProductDto orderProductItem)
+    public async Task<BaseResult<OrderProductDto>> AddProductToOrderAsync(OrderProductDto orderProductItem)
     {
         var orderProduct = _mapper.Map<OrderProduct>(orderProductItem);
-        try
-        {
-            await _orderProductRepository.CreateAsync(orderProduct);
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Something went wrong during adding product to order: {ex.Message}");
-        }
+        await _orderProductRepository.CreateAsync(orderProduct);
+        return new BaseResult<OrderProductDto> { Data = orderProductItem };
     }
-    public async Task UpdateProductQuantityInOrderAsync(OrderProductDto orderProductItem)
+    public async Task<BaseResult<OrderProductDto>> UpdateProductQuantityInOrderAsync(OrderProductDto orderProductItem)
     {
+        var orderProductById = await _orderProductRepository.GetByIdAsync(orderProductItem.Id);
+        if(orderProductById == null)
+        {
+            return new BaseResult<OrderProductDto> { ErrorMessage = "Order product not found" };
+        }
         var orderProductUpdated = _mapper.Map<OrderProduct>(orderProductItem);
         await _orderProductRepository.UpdateAsync(orderProductUpdated);
+        return new BaseResult<OrderProductDto> { Data = orderProductItem };
     }
 
-    public async Task RemoveProductFromOrderAsync(long Id)
+    public async Task<BaseResult<long>> RemoveProductFromOrderAsync(long Id)
     {
         var orderProduct = await _orderProductRepository.GetByIdAsync(Id);
         if (orderProduct == null)
-            throw new Exception($"OrderProduct with id = {Id} was not found");
+        {
+            return new BaseResult<long> { ErrorMessage = "Order product not found" };
+        }
         await _orderProductRepository.DeleteAsync(orderProduct);
+        return new BaseResult<long> { Data = Id };
     }
 
-    public async Task<List<OrderProductDto>> GetProductsByOrder(long OrderId)
+    public async Task<CollectionResult<OrderProductDto>> GetProductsByOrder(long OrderId)
     {
         var order = await _orderRepository.GetByIdAsync(OrderId);
         if (order == null)
-            throw new Exception($"Order with id = {OrderId} was not found");
+        {
+            return new CollectionResult<OrderProductDto> { ErrorMessage = "Order not found" };
+        }
         var productsInOrderResult = await _orderProductRepository.GetByOrder(order);
         var productsInOrder = _mapper.Map<List<OrderProductDto>>(productsInOrderResult.ToList());
-        return productsInOrder;
+        return new CollectionResult<OrderProductDto> { Data = productsInOrder };
     }
 }

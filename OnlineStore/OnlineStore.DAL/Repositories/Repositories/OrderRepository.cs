@@ -3,7 +3,7 @@ using OnlineStore.DAL.ApplicationDbContext;
 using OnlineStore.DAL.Repositories.interfaces;
 using OnlineStore.Domain.Entities;
 
-namespace OnlineStore.DAL.Repositories.repositories
+namespace OnlineStore.DAL.Repositories.Repositories
 {
     public class OrderRepository : BaseRepository<Order>,IOrderRepository
     {

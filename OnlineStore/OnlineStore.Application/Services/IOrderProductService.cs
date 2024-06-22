@@ -1,10 +1,11 @@
 ﻿using OnlineStore.Application.DTOs.OrderProductDTOs;
+using OnlineStore.Application.Result;
 
 namespace OnlineStore.Application.Services;
 public interface IOrderProductService
 {
-    public Task AddProductToOrderAsync(OrderProductDto orderProductItem);
-    public Task UpdateProductQuantityInOrderAsync(OrderProductDto orderProductItem);
-    public Task RemoveProductFromOrderAsync(long Id);
-    public Task<List<OrderProductDto>> GetProductsByOrder(long OrderId);
+    public Task<BaseResult<OrderProductDto>> AddProductToOrderAsync(OrderProductDto orderProductItem);
+    public Task<BaseResult<OrderProductDto>> UpdateProductQuantityInOrderAsync(OrderProductDto orderProductItem);
+    public Task<BaseResult<long>> RemoveProductFromOrderAsync(long Id);
+    public Task<CollectionResult<OrderProductDto>> GetProductsByOrder(long OrderId);
 }
