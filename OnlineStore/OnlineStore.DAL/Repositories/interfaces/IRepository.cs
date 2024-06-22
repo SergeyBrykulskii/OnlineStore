@@ -10,7 +10,7 @@ namespace OnlineStore.DAL.Repositories.interfaces
         public Task<bool> DeleteAsync(T entity, CancellationToken cancellationToken = default);
         public Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> filters, CancellationToken cancellationToken = default);
         public Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> filters, CancellationToken cancellationToken = default, params Expression<Func<T, object>>[] includeProperties);
-        public Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken);
+        public Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default);
         public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }
