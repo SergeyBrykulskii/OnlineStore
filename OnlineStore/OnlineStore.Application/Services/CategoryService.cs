@@ -31,7 +31,6 @@ public class CategoryService : ICategoryService
     {
         var category = _mapper.Map<Category>(categoryDto);
         await _categoryRepository.CreateAsync(category);
-        await _categoryRepository.SaveChangesAsync();
         return _mapper.Map<CategoryDto>(category);
     }
 
@@ -39,10 +38,6 @@ public class CategoryService : ICategoryService
     {
         var category = _mapper.Map<Category>(categoryDto);
         var updated = await _categoryRepository.UpdateAsync(category);
-        if (updated)
-        {
-            await _categoryRepository.SaveChangesAsync();
-        }
         return updated;
     }
 

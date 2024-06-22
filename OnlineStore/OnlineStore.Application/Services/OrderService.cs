@@ -10,7 +10,6 @@ namespace OnlineStore.Application.Services
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
-        //private readonly IUserRepository _userRepository;
 
         public OrderService(IOrderRepository orderRepository, IMapper mapper)
         {
@@ -24,10 +23,8 @@ namespace OnlineStore.Application.Services
             return _mapper.Map<List<OrderDto>>(orders);
         }
         
-        //Здесь по-хорошему нужно брать user через _userRepository.GetByIdAsync(userId), но пока нет юзер-репозитория
         public async Task<List<OrderDto>> GetAllOrdersByUserAsync(User user)
         {
-            //var user = await _userRepository.GetByIdAsync(userId);
             var orders = await _orderRepository.GetAllByUser(user);
             return _mapper.Map<List<OrderDto>>(orders);
         }
@@ -42,7 +39,6 @@ namespace OnlineStore.Application.Services
         {
             var order = _mapper.Map<Order>(orderDto);
             await _orderRepository.CreateAsync(order);
-            await _orderRepository.SaveChangesAsync();
             return _mapper.Map<OrderDto>(order);
         }
 
@@ -50,10 +46,6 @@ namespace OnlineStore.Application.Services
         {
             var order = _mapper.Map<Order>(orderDto);
             var updated = await _orderRepository.UpdateAsync(order);
-            if (updated)
-            {
-                await _orderRepository.SaveChangesAsync();
-            }
             return updated;
         }
 
