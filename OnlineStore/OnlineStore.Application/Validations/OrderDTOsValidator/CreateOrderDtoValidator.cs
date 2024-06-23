@@ -1,14 +1,13 @@
 ﻿using FluentValidation;
 using OnlineStore.Application.DTOs.OrderDTOs;
 
-namespace OnlineStore.Application.Validations.OrderDTOsValidator
+namespace OnlineStore.Application.Validations.OrderDTOsValidator;
+
+public class CreateOrderDtoValidator : AbstractValidator<CreateOrderDto>
 {
-	public class CreateOrderDtoValidator : AbstractValidator<CreateOrderDto>
-	{
-		public CreateOrderDtoValidator()
-		{
-			RuleFor(c => c.UserId)
-				.NotEmpty().WithMessage("User id should not be empty");
-		}
-	}
+    public CreateOrderDtoValidator()
+    {
+        RuleFor(c => c.UserId)
+            .NotEmpty().WithMessage("User id should not be empty");
+    }
 }

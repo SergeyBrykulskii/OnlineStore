@@ -2,6 +2,7 @@
 using OnlineStore.Application.Result;
 
 namespace OnlineStore.Application.Services;
+
 public interface IOrderProductService
 {
     public Task<BaseResult<CreateOrderProductDto>> AddProductToOrderAsync(CreateOrderProductDto orderProductItem);

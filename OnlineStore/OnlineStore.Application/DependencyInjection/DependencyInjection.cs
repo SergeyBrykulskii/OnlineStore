@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.Extensions.DependencyInjection;
-using OnlineStore.Application.Mapping;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 namespace OnlineStore.Application.DependencyInjection;
