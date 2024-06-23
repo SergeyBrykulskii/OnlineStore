@@ -8,9 +8,6 @@ public class OrderProductConfiguration : IEntityTypeConfiguration<OrderProduct>
 {
     public void Configure(EntityTypeBuilder<OrderProduct> builder)
     {
-
-        builder.HasKey(op => op.Id);
-
         builder.Property(op => op.ProductId)
             .IsRequired();
 
@@ -19,14 +16,5 @@ public class OrderProductConfiguration : IEntityTypeConfiguration<OrderProduct>
 
         builder.Property(op => op.Quantity)
             .IsRequired();
-
-        builder.HasOne(op => op.Product)
-        .WithOne()
-        .HasForeignKey<OrderProduct>(op => op.ProductId);
-
-        //builder.HasOne()
-        //     .WithMany(c => c.OrderProducts)
-        //     .HasForeignKey(p => p.OrderId)
-        //     .OnDelete(DeleteBehavior.Restrict);
     }
 }
