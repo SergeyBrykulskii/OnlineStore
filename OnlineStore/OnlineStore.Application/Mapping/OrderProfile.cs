@@ -4,7 +4,7 @@ using OnlineStore.Domain.Entities;
 
 namespace OnlineStore.Application.Mapping;
 
-public class OrderProfile: Profile
+public class OrderProfile : Profile
 {
     public OrderProfile()
     {

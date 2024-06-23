@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using OnlineStore.DAL.Repositories.interfaces;
+using OnlineStore.DAL.Repositories.Interfaces;
 using OnlineStore.DAL.Repositories.Repositories;
 
 namespace OnlineStore.DAL.DependencyInjection;

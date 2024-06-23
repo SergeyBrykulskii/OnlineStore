@@ -1,6 +1,7 @@
 ﻿using OnlineStore.Domain.Entities;
 
 namespace OnlineStore.Application.DTOs.OrderDTOs;
+
 public class OrderDetailDto
 {
     public long Id { get; set; }

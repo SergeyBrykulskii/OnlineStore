@@ -1,6 +1,5 @@
-﻿using OnlineStore.Domain.Entities;
+﻿namespace OnlineStore.Application.DTOs.OrderProductDTOs;
 
-namespace OnlineStore.Application.DTOs.OrderProductDTOs;
 public class CreateOrderProductDto
 {
     public long ProductId { get; set; }
