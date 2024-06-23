@@ -29,4 +29,15 @@ public class AuthController : ControllerBase
 
         return BadRequest(response);
     }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Authenticate([FromBody] UserAuthenticationDto user)
+    {
+        if (!await _authService.ValidateUser(user))
+        {
+            //_logger.LogWarn($"{nameof(Authenticate)}: Authentication failed. Wrong user name or password.");
+            return Unauthorized();
+        }
+        return Ok(new { Token = await _authService.CreateToken() });
+    }
 }
