@@ -19,12 +19,8 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         builder.Property(p => p.Price)
         .IsRequired();
+
         builder.Property(p => p.CategoryId)
             .IsRequired();
-
-        builder.HasOne(p => p.Category)
-              .WithMany(c => c.Products)
-              .HasForeignKey(p => p.CategoryId)
-              .OnDelete(DeleteBehavior.Restrict);
     }
 }

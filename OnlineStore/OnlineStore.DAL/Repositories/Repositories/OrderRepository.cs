@@ -18,7 +18,7 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
 
     public async Task<Order> GetByIdAsync(long id, CancellationToken cancellationToken = default)
     {
-        var query = _context.Orders.AsNoTracking().Include(o => o.OrderProducts).AsQueryable().Where(el => el.Id == id);
+        var query = _context.Orders.AsNoTracking().AsQueryable().Where(el => el.Id == id);
         return await query.FirstOrDefaultAsync(cancellationToken);
     }
 }
