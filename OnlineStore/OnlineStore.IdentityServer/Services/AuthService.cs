@@ -95,10 +95,17 @@ public class AuthService : IAuthService
     private JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, List<Claim> claims)
     {
         var jwtSettings = _configuration.GetSection("JwtSettings");
+        var validAudiences = jwtSettings.GetSection("ValidAudience").Get<string[]>();
+
+        foreach (var audience in validAudiences)
+        {
+            claims.Add(new Claim("aud", audience));
+        }
+
         var tokenOptions = new JwtSecurityToken
         (
             issuer: jwtSettings.GetSection("ValidIssuer").Value,
-            audience: jwtSettings.GetSection("ValidAudience").Value,
+            audience: string.Empty,
             claims: claims,
             expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings.GetSection("Expires").Value)),
             signingCredentials: signingCredentials

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineStore.IdentityServer.Models.DTOs;
 using OnlineStore.IdentityServer.Models.Result;
 using OnlineStore.IdentityServer.Services;
@@ -16,7 +17,7 @@ public class AuthController : ControllerBase
         _authService = authService;
     }
 
-    [HttpPost("register")]
+    [HttpPost("register"), Authorize]
     public async Task<ActionResult<BaseResult<UserDto>>> RegisterUser(
         [FromBody] UserRegistrationDto userRegistrationDto)
     {
