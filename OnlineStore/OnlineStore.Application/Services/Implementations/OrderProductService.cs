@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using OnlineStore.Application.DTOs.OrderProductDTOs;
+using OnlineStore.Application.Enums;
 using OnlineStore.Application.Resources;
 using OnlineStore.Application.Result;
 using OnlineStore.Application.Services.Interfaces;
@@ -36,7 +37,11 @@ public class OrderProductService : IOrderProductService
 
         if (validationResult.Errors.Count != 0)
         {
-            return new BaseResult<CreateOrderProductDto> { ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage };
+            return new BaseResult<CreateOrderProductDto>
+            {
+                ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage,
+                ErrorCode = (int)ErrorCodes.ValidationError
+            };
         }
 
         var orderProduct = _mapper.Map<OrderProduct>(orderProductItem);
@@ -51,14 +56,22 @@ public class OrderProductService : IOrderProductService
 
         if (validationResult.Errors.Count != 0)
         {
-            return new BaseResult<UpdateOrderProductDto> { ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage };
+            return new BaseResult<UpdateOrderProductDto>
+            {
+                ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage,
+                ErrorCode = (int)ErrorCodes.ValidationError
+            };
         }
 
         var orderProductById = await _orderProductRepository.GetByIdAsync(orderProductItem.Id);
 
         if (orderProductById == null)
         {
-            return new BaseResult<UpdateOrderProductDto> { ErrorMessage = ErrorMessage.OrderProductNotFound };
+            return new BaseResult<UpdateOrderProductDto>
+            {
+                ErrorMessage = ErrorMessage.OrderProductNotFound,
+                ErrorCode = (int)ErrorCodes.OrderProductNotFound
+            };
         }
 
         var orderProductUpdated = _mapper.Map<OrderProduct>(orderProductItem);
@@ -73,7 +86,11 @@ public class OrderProductService : IOrderProductService
 
         if (orderProduct == null)
         {
-            return new BaseResult<long> { ErrorMessage = ErrorMessage.OrderProductNotFound };
+            return new BaseResult<long>
+            {
+                ErrorMessage = ErrorMessage.OrderProductNotFound,
+                ErrorCode = (int)ErrorCodes.OrderProductNotFound
+            };
         }
 
         await _orderProductRepository.DeleteAsync(orderProduct);
@@ -87,7 +104,11 @@ public class OrderProductService : IOrderProductService
 
         if (order == null)
         {
-            return new CollectionResult<OrderProductDto> { ErrorMessage = ErrorMessage.OrderNotFound };
+            return new CollectionResult<OrderProductDto>
+            {
+                ErrorMessage = ErrorMessage.OrderNotFound,
+                ErrorCode = (int)ErrorCodes.OrderNotFound
+            };
         }
 
         var productsInOrderResult = await _orderProductRepository.GetByOrderAsync(order);
