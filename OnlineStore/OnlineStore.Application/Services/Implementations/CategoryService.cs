@@ -1,6 +1,7 @@
 using AutoMapper;
 using FluentValidation;
 using OnlineStore.Application.DTOs.CategoryDTOs;
+using OnlineStore.Application.Resources;
 using OnlineStore.Application.Result;
 using OnlineStore.Application.Services.Interfaces;
 using OnlineStore.DAL.Repositories.Interfaces;
@@ -41,7 +42,7 @@ public class CategoryService : ICategoryService
 
         if (category == null)
         {
-            return new BaseResult<CategoryDto> { ErrorMessage = "Category not found" };
+            return new BaseResult<CategoryDto> { ErrorMessage = ErrorMessage.CategoryNotFound };
         }
         var categoryDto = _mapper.Map<CategoryDto>(category);
 
@@ -74,7 +75,7 @@ public class CategoryService : ICategoryService
 
         if (categoryById == null)
         {
-            return new BaseResult<UpdateCategoryDto> { ErrorMessage = "Category not found" };
+            return new BaseResult<UpdateCategoryDto> { ErrorMessage = ErrorMessage.CategoryNotFound };
         }
         var category = _mapper.Map<Category>(categoryDto);
         await _categoryRepository.UpdateAsync(category);
@@ -88,7 +89,7 @@ public class CategoryService : ICategoryService
 
         if (category == null)
         {
-            return new BaseResult<long> { ErrorMessage = "Category not found" };
+            return new BaseResult<long> { ErrorMessage = ErrorMessage.CategoryNotFound };
         }
         await _categoryRepository.DeleteAsync(category);
 

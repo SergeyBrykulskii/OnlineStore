@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using OnlineStore.Application.DTOs.ProductDTOs;
+using OnlineStore.Application.Resources;
 using OnlineStore.Application.Result;
 using OnlineStore.Application.Services.Interfaces;
 using OnlineStore.DAL.Repositories.Interfaces;
@@ -58,7 +59,7 @@ public class ProductService : IProductService
 
         if (product == null)
         {
-            return new BaseResult<ProductDetailDto> { ErrorMessage = "Product not found" };
+            return new BaseResult<ProductDetailDto> { ErrorMessage = ErrorMessage.ProductNotFound };
         }
         var productDetailDto = _mapper.Map<ProductDetailDto>(product);
 
@@ -71,7 +72,7 @@ public class ProductService : IProductService
 
         if (category == null)
         {
-            return new CollectionResult<ProductDto> { ErrorMessage = "Category not found" };
+            return new CollectionResult<ProductDto> { ErrorMessage = ErrorMessage.CategoryNotFound };
         }
         var products = await _productRepository.GetByCategoryAsync(category);
         var productDtos = _mapper.Map<List<ProductDto>>(products);
@@ -90,7 +91,7 @@ public class ProductService : IProductService
 
         if (productById == null)
         {
-            return new BaseResult<UpdateProductDto> { ErrorMessage = "Product not found" };
+            return new BaseResult<UpdateProductDto> { ErrorMessage = ErrorMessage.ProductNotFound };
         }
         var product = _mapper.Map<Product>(productDto);
         await _productRepository.UpdateAsync(product);
@@ -104,7 +105,7 @@ public class ProductService : IProductService
 
         if (product == null)
         {
-            return new BaseResult<long> { ErrorMessage = "Product not found" };
+            return new BaseResult<long> { ErrorMessage = ErrorMessage.ProductNotFound };
         }
         await _productRepository.DeleteAsync(product);
 

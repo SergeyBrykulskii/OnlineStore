@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using OnlineStore.Application.DTOs.OrderProductDTOs;
+using OnlineStore.Application.Resources;
 using OnlineStore.Application.Result;
 using OnlineStore.Application.Services.Interfaces;
 using OnlineStore.DAL.Repositories.Interfaces;
@@ -55,7 +56,7 @@ public class OrderProductService : IOrderProductService
 
         if (orderProductById == null)
         {
-            return new BaseResult<UpdateOrderProductDto> { ErrorMessage = "Order product not found" };
+            return new BaseResult<UpdateOrderProductDto> { ErrorMessage = ErrorMessage.OrderProductNotFound };
         }
         var orderProductUpdated = _mapper.Map<OrderProduct>(orderProductItem);
         await _orderProductRepository.UpdateAsync(orderProductUpdated);
@@ -69,7 +70,7 @@ public class OrderProductService : IOrderProductService
 
         if (orderProduct == null)
         {
-            return new BaseResult<long> { ErrorMessage = "Order product not found" };
+            return new BaseResult<long> { ErrorMessage = ErrorMessage.OrderProductNotFound };
         }
         await _orderProductRepository.DeleteAsync(orderProduct);
 
@@ -82,7 +83,7 @@ public class OrderProductService : IOrderProductService
 
         if (order == null)
         {
-            return new CollectionResult<OrderProductDto> { ErrorMessage = "Order not found" };
+            return new CollectionResult<OrderProductDto> { ErrorMessage = ErrorMessage.OrderNotFound };
         }
         var productsInOrderResult = await _orderProductRepository.GetByOrderAsync(order);
         var productsInOrder = _mapper.Map<List<OrderProductDto>>(productsInOrderResult.ToList());
