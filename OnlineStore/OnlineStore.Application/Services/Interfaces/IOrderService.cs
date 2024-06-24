@@ -2,7 +2,7 @@ using OnlineStore.Application.DTOs.OrderDTOs;
 using OnlineStore.Application.Result;
 using OnlineStore.Domain.Entities;
 
-namespace OnlineStore.Application.Services;
+namespace OnlineStore.Application.Services.Interfaces;
 
 public interface IOrderService
 {
