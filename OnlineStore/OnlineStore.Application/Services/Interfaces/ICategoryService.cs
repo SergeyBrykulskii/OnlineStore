@@ -1,7 +1,7 @@
 using OnlineStore.Application.DTOs.CategoryDTOs;
 using OnlineStore.Application.Result;
 
-namespace OnlineStore.Application.Services;
+namespace OnlineStore.Application.Services.Interfaces;
 
 public interface ICategoryService
 {

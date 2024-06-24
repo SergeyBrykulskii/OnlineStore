@@ -14,9 +14,9 @@ public static class DependencyInjection
 
     public static void InitRepositories(this IServiceCollection services)
     {
-        services.AddTransient<IProductRepository, ProductRepository>()
-            .AddTransient<ICategoryRepository, CategoryRepository>()
-            .AddTransient<IOrderRepository, OrderRepository>()
-            .AddTransient<IOrderProductRepository, OrderProductRepository>();
+        services.AddScoped<IProductRepository, ProductRepository>()
+            .AddScoped<ICategoryRepository, CategoryRepository>()
+            .AddScoped<IOrderRepository, OrderRepository>()
+            .AddScoped<IOrderProductRepository, OrderProductRepository>();
     }
 }

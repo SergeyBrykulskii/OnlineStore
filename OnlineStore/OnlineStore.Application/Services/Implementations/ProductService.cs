@@ -2,10 +2,11 @@
 using FluentValidation;
 using OnlineStore.Application.DTOs.ProductDTOs;
 using OnlineStore.Application.Result;
+using OnlineStore.Application.Services.Interfaces;
 using OnlineStore.DAL.Repositories.Interfaces;
 using OnlineStore.Domain.Entities;
 
-namespace OnlineStore.Application.Services;
+namespace OnlineStore.Application.Services.Implementations;
 
 public class ProductService : IProductService
 {
