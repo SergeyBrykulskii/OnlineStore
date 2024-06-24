@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OnlineStore.DAL.ApplicationDbContext;
 using OnlineStore.DAL.Repositories.Interfaces;
+using OnlineStore.Domain.Interfaces.Entities;
 using System.Linq.Expressions;
 
 
 namespace OnlineStore.DAL.Repositories.Repositories;
 
-public abstract class BaseRepository<T> : IRepository<T> where T : class
+public abstract class BaseRepository<T> : IRepository<T> where T : class, IEntity
 {
     protected readonly AppDbContext _context;
 
@@ -16,6 +17,11 @@ public abstract class BaseRepository<T> : IRepository<T> where T : class
     {
         _context = context;
         _dbSet = context.Set<T>();
+    }
+    public async Task<T> GetByIdAsync(long id, CancellationToken cancellationToken = default)
+    {
+        var query = _dbSet.AsNoTracking().AsQueryable();
+        return await query.FirstOrDefaultAsync(el => el.Id == id, cancellationToken);
     }
 
     public async Task CreateAsync(T entity, CancellationToken cancellationToken = default)
@@ -28,7 +34,7 @@ public abstract class BaseRepository<T> : IRepository<T> where T : class
     public async Task<bool> DeleteAsync(T entity, CancellationToken cancellationToken = default)
     {
         _dbSet.Remove(entity);
-        var deletedRows = await _context.SaveChangesAsync();
+        var deletedRows = await _context.SaveChangesAsync(cancellationToken);
         return deletedRows > 0;
     }
 
@@ -58,7 +64,7 @@ public abstract class BaseRepository<T> : IRepository<T> where T : class
     public async Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken = default)
     {
         _dbSet.Update(entity);
-        var updatedRows = await _context.SaveChangesAsync();
+        var updatedRows = await _context.SaveChangesAsync(cancellationToken);
         return updatedRows > 0;
     }
 

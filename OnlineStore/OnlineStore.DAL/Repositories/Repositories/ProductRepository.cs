@@ -13,12 +13,6 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
     {
         return await _context.Products.AsNoTracking().Include(c => c.Category)
                               .Where(p => p.CategoryId == category.Id)
-                              .ToListAsync();
-    }
-
-    public async Task<Product> GetByIdAsync(long id, CancellationToken cancellationToken = default)
-    {
-        var query = _context.Products.AsNoTracking().AsQueryable().Where(el => el.Id == id);
-        return await query.FirstOrDefaultAsync(cancellationToken);
+                              .ToListAsync(cancellationToken);
     }
 }

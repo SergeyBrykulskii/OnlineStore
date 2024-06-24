@@ -84,7 +84,7 @@ public class OrderProductService : IOrderProductService
         {
             return new CollectionResult<OrderProductDto> { ErrorMessage = "Order not found" };
         }
-        var productsInOrderResult = await _orderProductRepository.GetByOrder(order);
+        var productsInOrderResult = await _orderProductRepository.GetByOrderAsync(order);
         var productsInOrder = _mapper.Map<List<OrderProductDto>>(productsInOrderResult.ToList());
 
         return new CollectionResult<OrderProductDto> { Data = productsInOrder };

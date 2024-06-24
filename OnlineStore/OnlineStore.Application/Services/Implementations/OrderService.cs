@@ -37,7 +37,7 @@ public class OrderService : IOrderService
 
     public async Task<CollectionResult<OrderDto>> GetAllOrdersByUserAsync(User user)
     {
-        var orders = await _orderRepository.GetAllByUser(user);
+        var orders = await _orderRepository.GetAllByUserAsync(user);
         var orderDtos = _mapper.Map<List<OrderDto>>(orders);
 
         return new CollectionResult<OrderDto> { Data = orderDtos };
