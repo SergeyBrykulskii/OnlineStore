@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using OnlineStore.Application.DTOs.ProductDTOs;
+using OnlineStore.Application.Enums;
+using OnlineStore.Application.Resources;
 using OnlineStore.Application.Result;
 using OnlineStore.Application.Services.Interfaces;
 using OnlineStore.DAL.Repositories.Interfaces;
@@ -36,8 +38,13 @@ public class ProductService : IProductService
 
         if (validationResult.Errors.Count != 0)
         {
-            return new BaseResult<CreateProductDto> { ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage };
+            return new BaseResult<CreateProductDto>
+            {
+                ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage,
+                ErrorCode = (int)ErrorCodes.ValidationError
+            };
         }
+
         var product = _mapper.Map<Product>(productDto);
         await _productRepository.CreateAsync(product);
 
@@ -58,8 +65,13 @@ public class ProductService : IProductService
 
         if (product == null)
         {
-            return new BaseResult<ProductDetailDto> { ErrorMessage = "Product not found" };
+            return new BaseResult<ProductDetailDto>
+            {
+                ErrorMessage = ErrorMessage.ProductNotFound,
+                ErrorCode = (int)ErrorCodes.ProductNotFound
+            };
         }
+
         var productDetailDto = _mapper.Map<ProductDetailDto>(product);
 
         return new BaseResult<ProductDetailDto> { Data = productDetailDto };
@@ -71,8 +83,13 @@ public class ProductService : IProductService
 
         if (category == null)
         {
-            return new CollectionResult<ProductDto> { ErrorMessage = "Category not found" };
+            return new CollectionResult<ProductDto>
+            {
+                ErrorMessage = ErrorMessage.CategoryNotFound,
+                ErrorCode = (int)ErrorCodes.CategoryNotFound
+            };
         }
+
         var products = await _productRepository.GetByCategoryAsync(category);
         var productDtos = _mapper.Map<List<ProductDto>>(products);
 
@@ -84,14 +101,24 @@ public class ProductService : IProductService
 
         if (validationResult.Errors.Count != 0)
         {
-            return new BaseResult<UpdateProductDto> { ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage };
+            return new BaseResult<UpdateProductDto>
+            {
+                ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage,
+                ErrorCode = (int)ErrorCodes.ValidationError
+            };
         }
+
         var productById = await _productRepository.GetByIdAsync(productDto.Id);
 
         if (productById == null)
         {
-            return new BaseResult<UpdateProductDto> { ErrorMessage = "Product not found" };
+            return new BaseResult<UpdateProductDto>
+            {
+                ErrorMessage = ErrorMessage.ProductNotFound,
+                ErrorCode = (int)ErrorCodes.ProductNotFound
+            };
         }
+
         var product = _mapper.Map<Product>(productDto);
         await _productRepository.UpdateAsync(product);
 
@@ -104,8 +131,13 @@ public class ProductService : IProductService
 
         if (product == null)
         {
-            return new BaseResult<long> { ErrorMessage = "Product not found" };
+            return new BaseResult<long>
+            {
+                ErrorMessage = ErrorMessage.ProductNotFound,
+                ErrorCode = (int)ErrorCodes.ProductNotFound
+            };
         }
+
         await _productRepository.DeleteAsync(product);
 
         return new BaseResult<long> { Data = id };

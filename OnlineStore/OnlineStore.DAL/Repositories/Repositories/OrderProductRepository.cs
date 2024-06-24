@@ -10,13 +10,7 @@ public class OrderProductRepository : BaseRepository<OrderProduct>, IOrderProduc
 {
     public OrderProductRepository(AppDbContext context) : base(context) { }
 
-    public async Task<OrderProduct> GetByIdAsync(long id, CancellationToken cancellationToken)
-    {
-        var query = _context.OrderProducts.AsNoTracking().AsQueryable().Where(el => el.Id == id);
-        return await query.FirstOrDefaultAsync(cancellationToken);
-    }
-
-    public async Task<IEnumerable<OrderProduct>> GetByOrder(Order order, CancellationToken cancellationToken)
+    public async Task<IEnumerable<OrderProduct>> GetByOrderAsync(Order order, CancellationToken cancellationToken = default)
     {
         return await _context.OrderProducts.AsNoTracking().Include(c => c.Product)
                               .Where(p => p.OrderId == order.Id)

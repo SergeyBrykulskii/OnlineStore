@@ -1,6 +1,8 @@
 using AutoMapper;
 using FluentValidation;
 using OnlineStore.Application.DTOs.OrderDTOs;
+using OnlineStore.Application.Enums;
+using OnlineStore.Application.Resources;
 using OnlineStore.Application.Result;
 using OnlineStore.Application.Services.Interfaces;
 using OnlineStore.DAL.Repositories.Interfaces;
@@ -37,7 +39,7 @@ public class OrderService : IOrderService
 
     public async Task<CollectionResult<OrderDto>> GetAllOrdersByUserAsync(User user)
     {
-        var orders = await _orderRepository.GetAllByUser(user);
+        var orders = await _orderRepository.GetAllByUserAsync(user);
         var orderDtos = _mapper.Map<List<OrderDto>>(orders);
 
         return new CollectionResult<OrderDto> { Data = orderDtos };
@@ -49,8 +51,13 @@ public class OrderService : IOrderService
 
         if (order == null)
         {
-            return new BaseResult<OrderDetailDto> { ErrorMessage = "Order not found" };
+            return new BaseResult<OrderDetailDto>
+            {
+                ErrorMessage = ErrorMessage.OrderNotFound,
+                ErrorCode = (int)ErrorCodes.OrderNotFound
+            };
         }
+
         var orderDto = _mapper.Map<OrderDetailDto>(order);
 
         return new BaseResult<OrderDetailDto> { Data = orderDto };
@@ -62,8 +69,13 @@ public class OrderService : IOrderService
 
         if (validationResult.Errors.Count != 0)
         {
-            return new BaseResult<CreateOrderDto> { ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage };
+            return new BaseResult<CreateOrderDto>
+            {
+                ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage,
+                ErrorCode = (int)ErrorCodes.ValidationError
+            };
         }
+
         var order = _mapper.Map<Order>(orderDto);
         await _orderRepository.CreateAsync(order);
 
@@ -76,14 +88,24 @@ public class OrderService : IOrderService
 
         if (validationResult.Errors.Count != 0)
         {
-            return new BaseResult<OrderDto> { ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage };
+            return new BaseResult<OrderDto>
+            {
+                ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage,
+                ErrorCode = (int)ErrorCodes.ValidationError
+            };
         }
+
         var orderById = await _orderRepository.GetByIdAsync(orderDto.Id);
 
         if (orderById == null)
         {
-            return new BaseResult<OrderDto> { ErrorMessage = "Order not found" };
+            return new BaseResult<OrderDto>
+            {
+                ErrorMessage = ErrorMessage.OrderNotFound,
+                ErrorCode = (int)ErrorCodes.OrderNotFound
+            };
         }
+
         var order = _mapper.Map<Order>(orderDto);
         await _orderRepository.UpdateAsync(order);
 
@@ -96,8 +118,13 @@ public class OrderService : IOrderService
 
         if (order == null)
         {
-            return new BaseResult<long> { ErrorMessage = "Order not found" };
+            return new BaseResult<long>
+            {
+                ErrorMessage = ErrorMessage.OrderNotFound,
+                ErrorCode = (int)ErrorCodes.OrderNotFound
+            };
         }
+
         await _orderRepository.DeleteAsync(order);
 
         return new BaseResult<long> { Data = id };

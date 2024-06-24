@@ -1,6 +1,8 @@
 using AutoMapper;
 using FluentValidation;
 using OnlineStore.Application.DTOs.CategoryDTOs;
+using OnlineStore.Application.Enums;
+using OnlineStore.Application.Resources;
 using OnlineStore.Application.Result;
 using OnlineStore.Application.Services.Interfaces;
 using OnlineStore.DAL.Repositories.Interfaces;
@@ -41,8 +43,13 @@ public class CategoryService : ICategoryService
 
         if (category == null)
         {
-            return new BaseResult<CategoryDto> { ErrorMessage = "Category not found" };
+            return new BaseResult<CategoryDto>
+            {
+                ErrorMessage = ErrorMessage.CategoryNotFound,
+                ErrorCode = (int)ErrorCodes.CategoryNotFound
+            };
         }
+
         var categoryDto = _mapper.Map<CategoryDto>(category);
 
         return new BaseResult<CategoryDto> { Data = categoryDto };
@@ -54,8 +61,13 @@ public class CategoryService : ICategoryService
 
         if (validationResult.Errors.Count != 0)
         {
-            return new BaseResult<CreateCategoryDto> { ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage };
+            return new BaseResult<CreateCategoryDto>
+            {
+                ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage,
+                ErrorCode = (int)ErrorCodes.ValidationError
+            };
         }
+
         var category = _mapper.Map<Category>(categoryDto);
         await _categoryRepository.CreateAsync(category);
 
@@ -68,14 +80,24 @@ public class CategoryService : ICategoryService
 
         if (validationResult.Errors.Count != 0)
         {
-            return new BaseResult<UpdateCategoryDto> { ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage };
+            return new BaseResult<UpdateCategoryDto>
+            {
+                ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage,
+                ErrorCode = (int)ErrorCodes.ValidationError
+            };
         }
+
         var categoryById = await _categoryRepository.GetByIdAsync(categoryDto.Id);
 
         if (categoryById == null)
         {
-            return new BaseResult<UpdateCategoryDto> { ErrorMessage = "Category not found" };
+            return new BaseResult<UpdateCategoryDto>
+            {
+                ErrorMessage = ErrorMessage.CategoryNotFound,
+                ErrorCode = (int)ErrorCodes.CategoryNotFound
+            };
         }
+
         var category = _mapper.Map<Category>(categoryDto);
         await _categoryRepository.UpdateAsync(category);
 
@@ -88,8 +110,13 @@ public class CategoryService : ICategoryService
 
         if (category == null)
         {
-            return new BaseResult<long> { ErrorMessage = "Category not found" };
+            return new BaseResult<long>
+            {
+                ErrorMessage = ErrorMessage.CategoryNotFound,
+                ErrorCode = (int)ErrorCodes.CategoryNotFound
+            };
         }
+
         await _categoryRepository.DeleteAsync(category);
 
         return new BaseResult<long> { Data = id };
