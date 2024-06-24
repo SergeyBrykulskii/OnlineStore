@@ -38,6 +38,7 @@ public class OrderProductService : IOrderProductService
         {
             return new BaseResult<CreateOrderProductDto> { ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage };
         }
+
         var orderProduct = _mapper.Map<OrderProduct>(orderProductItem);
         await _orderProductRepository.CreateAsync(orderProduct);
 
@@ -52,12 +53,14 @@ public class OrderProductService : IOrderProductService
         {
             return new BaseResult<UpdateOrderProductDto> { ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage };
         }
+
         var orderProductById = await _orderProductRepository.GetByIdAsync(orderProductItem.Id);
 
         if (orderProductById == null)
         {
             return new BaseResult<UpdateOrderProductDto> { ErrorMessage = ErrorMessage.OrderProductNotFound };
         }
+
         var orderProductUpdated = _mapper.Map<OrderProduct>(orderProductItem);
         await _orderProductRepository.UpdateAsync(orderProductUpdated);
 
@@ -72,6 +75,7 @@ public class OrderProductService : IOrderProductService
         {
             return new BaseResult<long> { ErrorMessage = ErrorMessage.OrderProductNotFound };
         }
+
         await _orderProductRepository.DeleteAsync(orderProduct);
 
         return new BaseResult<long> { Data = Id };
@@ -85,6 +89,7 @@ public class OrderProductService : IOrderProductService
         {
             return new CollectionResult<OrderProductDto> { ErrorMessage = ErrorMessage.OrderNotFound };
         }
+
         var productsInOrderResult = await _orderProductRepository.GetByOrderAsync(order);
         var productsInOrder = _mapper.Map<List<OrderProductDto>>(productsInOrderResult.ToList());
 

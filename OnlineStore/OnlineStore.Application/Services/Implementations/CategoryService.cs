@@ -44,6 +44,7 @@ public class CategoryService : ICategoryService
         {
             return new BaseResult<CategoryDto> { ErrorMessage = ErrorMessage.CategoryNotFound };
         }
+
         var categoryDto = _mapper.Map<CategoryDto>(category);
 
         return new BaseResult<CategoryDto> { Data = categoryDto };
@@ -57,6 +58,7 @@ public class CategoryService : ICategoryService
         {
             return new BaseResult<CreateCategoryDto> { ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage };
         }
+
         var category = _mapper.Map<Category>(categoryDto);
         await _categoryRepository.CreateAsync(category);
 
@@ -71,12 +73,14 @@ public class CategoryService : ICategoryService
         {
             return new BaseResult<UpdateCategoryDto> { ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage };
         }
+
         var categoryById = await _categoryRepository.GetByIdAsync(categoryDto.Id);
 
         if (categoryById == null)
         {
             return new BaseResult<UpdateCategoryDto> { ErrorMessage = ErrorMessage.CategoryNotFound };
         }
+
         var category = _mapper.Map<Category>(categoryDto);
         await _categoryRepository.UpdateAsync(category);
 
@@ -91,6 +95,7 @@ public class CategoryService : ICategoryService
         {
             return new BaseResult<long> { ErrorMessage = ErrorMessage.CategoryNotFound };
         }
+
         await _categoryRepository.DeleteAsync(category);
 
         return new BaseResult<long> { Data = id };

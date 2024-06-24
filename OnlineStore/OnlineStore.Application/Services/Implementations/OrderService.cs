@@ -52,6 +52,7 @@ public class OrderService : IOrderService
         {
             return new BaseResult<OrderDetailDto> { ErrorMessage = ErrorMessage.OrderNotFound };
         }
+
         var orderDto = _mapper.Map<OrderDetailDto>(order);
 
         return new BaseResult<OrderDetailDto> { Data = orderDto };
@@ -65,6 +66,7 @@ public class OrderService : IOrderService
         {
             return new BaseResult<CreateOrderDto> { ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage };
         }
+
         var order = _mapper.Map<Order>(orderDto);
         await _orderRepository.CreateAsync(order);
 
@@ -79,12 +81,14 @@ public class OrderService : IOrderService
         {
             return new BaseResult<OrderDto> { ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage };
         }
+
         var orderById = await _orderRepository.GetByIdAsync(orderDto.Id);
 
         if (orderById == null)
         {
             return new BaseResult<OrderDto> { ErrorMessage = ErrorMessage.OrderNotFound };
         }
+
         var order = _mapper.Map<Order>(orderDto);
         await _orderRepository.UpdateAsync(order);
 
@@ -99,6 +103,7 @@ public class OrderService : IOrderService
         {
             return new BaseResult<long> { ErrorMessage = ErrorMessage.OrderNotFound };
         }
+
         await _orderRepository.DeleteAsync(order);
 
         return new BaseResult<long> { Data = id };
