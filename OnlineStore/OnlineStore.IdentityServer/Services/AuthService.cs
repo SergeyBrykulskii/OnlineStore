@@ -64,10 +64,28 @@ public class AuthService : IAuthService
         };
     }
 
-    public async Task<bool> ValidateUser(UserAuthenticationDto userAuthDto)
+    public async Task<BaseResult> ValidateUser(UserAuthenticationDto userAuthDto)
     {
         _user = await _userManager.FindByNameAsync(userAuthDto.UserName);
-        return (_user != null && await _userManager.CheckPasswordAsync(_user, userAuthDto.Password));
+
+        if (_user == null)
+        {
+            return new BaseResult()
+            {
+                ErrorMessage = "User not found",
+
+            };
+        }
+        bool isPasswordCorrect = await _userManager.CheckPasswordAsync(_user, userAuthDto.Password);
+        if (!isPasswordCorrect)
+        {
+            return new BaseResult()
+            {
+                ErrorMessage = "Incorrect password"
+            };
+        }
+
+        return new BaseResult();
     }
 
     private SigningCredentials GetSigningCredentials()
