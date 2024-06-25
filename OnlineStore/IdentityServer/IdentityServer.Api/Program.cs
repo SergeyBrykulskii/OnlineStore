@@ -2,40 +2,11 @@ using IdentityServer.Api.Extensions;
 using IdentityServer.Application.Services;
 using IdentityServer.DAL.ApplicationDbContext;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSwaggerGen(options =>
-{
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
-    {
-        In = ParameterLocation.Header,
-        Description = "Введите валидный токен",
-        Name = "Авторизация",
-        Type = SecuritySchemeType.Http,
-        BearerFormat = "JWT",
-        Scheme = "Bearer"
-    });
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme()
-            {
-                Reference = new OpenApiReference()
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                },
-                Name = "Bearer",
-                In = ParameterLocation.Header
-            },
-            Array.Empty<string>()
-        }
-    });
-});
-
+builder.Services.ConfigureSwagger();
 builder.Services.ConfigureIdentity();
 builder.Services.ConfigureJWT(builder.Configuration);
 
