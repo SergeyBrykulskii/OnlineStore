@@ -17,11 +17,6 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder.Property(o => o.UserId)
             .IsRequired();
 
-        builder.HasOne(c => c.User)
-         .WithMany(p => p.Orders)
-         .HasForeignKey(p => p.UserId)
-         .OnDelete(DeleteBehavior.Cascade);
-
         builder.HasMany(c => c.Products)
            .WithMany(p => p.Orders)
            .UsingEntity<OrderProduct>(

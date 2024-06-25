@@ -18,7 +18,10 @@ public class AuthService : IAuthService
 
     private User _user;
 
-    public AuthService(IMapper mapper, UserManager<User> userManager, IConfiguration configuration)
+    public AuthService(
+        IMapper mapper,
+        UserManager<User> userManager,
+        IConfiguration configuration)
     {
         _mapper = mapper;
         _userManager = userManager;
