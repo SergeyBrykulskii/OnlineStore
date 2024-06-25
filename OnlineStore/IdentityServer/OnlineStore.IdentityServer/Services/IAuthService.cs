@@ -1,8 +1,8 @@
-﻿using OnlineStore.IdentityServer.Models.DTOs;
-using OnlineStore.IdentityServer.Models.Result;
+﻿using IdentityServer.Models.DTOs;
+using IdentityServer.Models.Result;
 
 
-namespace OnlineStore.IdentityServer.Services;
+namespace IdentityServer.Services;
 
 public interface IAuthService
 {

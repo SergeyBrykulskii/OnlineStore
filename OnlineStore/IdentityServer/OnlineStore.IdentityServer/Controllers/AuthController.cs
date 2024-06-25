@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using IdentityServer.Models.DTOs;
+using IdentityServer.Models.Result;
+using IdentityServer.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OnlineStore.IdentityServer.Models.DTOs;
-using OnlineStore.IdentityServer.Models.Result;
-using OnlineStore.IdentityServer.Services;
 
-namespace OnlineStore.IdentityServer.Controllers;
+namespace IdentityServer.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

@@ -1,8 +1,8 @@
+using IdentityServer.ApplicationDbContext;
+using IdentityServer.Extensions;
+using IdentityServer.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using OnlineStore.IdentityServer.ApplicationDbContext;
-using OnlineStore.IdentityServer.Extensions;
-using OnlineStore.IdentityServer.Services;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -29,7 +29,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineStore.IdentityServer"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityServer", "IdentityServer", "{2FF8A5CF-24E9-47BE-9019-E53B7C33A06A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineStore.IdentityServer", "IdentityServer\OnlineStore.IdentityServer\OnlineStore.IdentityServer.csproj", "{F1F3F2C9-4B04-4033-A633-498E2287B31D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer", "IdentityServer\OnlineStore.IdentityServer\IdentityServer.csproj", "{F1F3F2C9-4B04-4033-A633-498E2287B31D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

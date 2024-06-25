@@ -1,4 +1,4 @@
-﻿namespace OnlineStore.IdentityServer.Models.Result;
+﻿namespace IdentityServer.Models.Result;
 
 public class BaseResult
 {

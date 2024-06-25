@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace OnlineStore.IdentityServer.Models;
+namespace IdentityServer.Models;
 
 public class User : IdentityUser<Guid>
 {

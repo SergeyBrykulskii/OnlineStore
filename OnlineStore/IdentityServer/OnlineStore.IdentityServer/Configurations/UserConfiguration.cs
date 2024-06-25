@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using IdentityServer.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using OnlineStore.IdentityServer.Models;
 
-namespace OnlineStore.IdentityServer.Configurations;
+namespace IdentityServer.Configurations;
 
 public class UserConfiguration : IEntityTypeConfiguration<User>
 {
