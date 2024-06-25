@@ -1,8 +1,8 @@
-﻿using IdentityServer.Models;
+﻿using IdentityServer.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace IdentityServer.Configurations;
+namespace IdentityServer.DAL.Configurations;
 
 public class UserConfiguration : IEntityTypeConfiguration<User>
 {

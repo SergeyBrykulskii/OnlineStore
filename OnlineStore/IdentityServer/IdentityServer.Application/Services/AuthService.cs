@@ -1,14 +1,15 @@
 ﻿using AutoMapper;
-using IdentityServer.Models;
-using IdentityServer.Models.DTOs;
-using IdentityServer.Models.Result;
+using IdentityServer.Application.Models.DTOs;
+using IdentityServer.Application.Models.Result;
+using IdentityServer.DAL.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace IdentityServer.Services;
+namespace IdentityServer.Application.Services;
 
 public class AuthService : IAuthService
 {

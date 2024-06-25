@@ -1,8 +1,8 @@
-﻿using IdentityServer.Models.DTOs;
-using IdentityServer.Models.Result;
+﻿using IdentityServer.Application.Models.DTOs;
+using IdentityServer.Application.Models.Result;
 
 
-namespace IdentityServer.Services;
+namespace IdentityServer.Application.Services;
 
 public interface IAuthService
 {

@@ -1,11 +1,11 @@
-﻿using IdentityServer.ApplicationDbContext;
-using IdentityServer.Models;
+﻿using IdentityServer.DAL.ApplicationDbContext;
+using IdentityServer.DAL.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace IdentityServer.Extensions;
+namespace IdentityServer.Api.Extensions;
 
 public static class ServiceExtensions
 {

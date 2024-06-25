@@ -1,10 +1,10 @@
-﻿using IdentityServer.Models;
+﻿using IdentityServer.DAL.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
-namespace IdentityServer.ApplicationDbContext;
+namespace IdentityServer.DAL.ApplicationDbContext;
 
 public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 {

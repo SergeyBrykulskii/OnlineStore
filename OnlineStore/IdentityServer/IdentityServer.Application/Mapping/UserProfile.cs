@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using IdentityServer.Models;
-using IdentityServer.Models.DTOs;
+using IdentityServer.Application.Models.DTOs;
+using IdentityServer.DAL.Models;
 
-namespace IdentityServer.Mapping;
+namespace IdentityServer.Application.Mapping;
 
 public class UserProfile : Profile
 {

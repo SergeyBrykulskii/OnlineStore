@@ -1,6 +1,6 @@
-using IdentityServer.ApplicationDbContext;
-using IdentityServer.Extensions;
-using IdentityServer.Services;
+using IdentityServer.Api.Extensions;
+using IdentityServer.Application.Services;
+using IdentityServer.DAL.ApplicationDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Reflection;

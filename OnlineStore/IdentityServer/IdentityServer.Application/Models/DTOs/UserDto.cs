@@ -1,4 +1,4 @@
-﻿namespace IdentityServer.Models.DTOs;
+﻿namespace IdentityServer.Application.Models.DTOs;
 
 public class UserDto
 {

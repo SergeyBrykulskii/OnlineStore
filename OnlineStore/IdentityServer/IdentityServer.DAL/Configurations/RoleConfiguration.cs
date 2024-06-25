@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace IdentityServer.Configurations;
+namespace IdentityServer.DAL.Configurations;
 
 public class RoleConfiguration : IEntityTypeConfiguration<IdentityRole>
 {

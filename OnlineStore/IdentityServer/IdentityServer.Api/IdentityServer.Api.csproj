@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Repositories\" />
+    <ProjectReference Include="..\IdentityServer.Application\IdentityServer.Application.csproj" />
   </ItemGroup>
 
 </Project>

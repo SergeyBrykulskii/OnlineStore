@@ -1,4 +1,4 @@
-﻿namespace IdentityServer.Models.Result;
+﻿namespace IdentityServer.Application.Models.Result;
 
 public class BaseResult
 {

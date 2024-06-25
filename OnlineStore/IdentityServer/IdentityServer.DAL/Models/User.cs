@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace IdentityServer.Models;
+namespace IdentityServer.DAL.Models;
 
 public class User : IdentityUser<Guid>
 {
