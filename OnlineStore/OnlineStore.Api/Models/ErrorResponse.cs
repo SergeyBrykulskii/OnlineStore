@@ -1,8 +1,7 @@
-﻿namespace OnlineStore.Api.Models
+﻿namespace OnlineStore.Api.Models;
+
+public class ErrorResponse
 {
-    public class ErrorResponse
-    {
-        public string? ErrorMessage { get; set; }
-        public int ErrorCode { get; set; }
-    }
+    public string? ErrorMessage { get; set; }
+    public int ErrorCode { get; set; }
 }

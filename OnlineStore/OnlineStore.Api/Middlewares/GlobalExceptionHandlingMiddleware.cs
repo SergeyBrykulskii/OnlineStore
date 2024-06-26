@@ -1,4 +1,5 @@
-﻿using Serilog.Core;
+﻿using OnlineStore.Api.Models;
+using Serilog.Core;
 
 namespace OnlineStore.Api.Middlewares;
 public class GlobalExceptionHandlingMiddleware
@@ -29,6 +30,12 @@ public class GlobalExceptionHandlingMiddleware
 
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-        await context.Response.WriteAsJsonAsync("error");
+
+        ErrorResponse errorResponse = new()
+        {
+            ErrorMessage = "Internal Server Error",
+            ErrorCode = StatusCodes.Status500InternalServerError
+        };
+        await context.Response.WriteAsJsonAsync(errorResponse);
     }
 }
