@@ -26,7 +26,7 @@ public class GlobalExceptionHandlingMiddleware
     private async Task HandleExceptionAsync(HttpContext context, Exception ex)
     {
         var logMessage = $"---> Request {context.Request.Path} failed with error: {ex.Message}";
-        _logger.Information(logMessage);
+        _logger.Error(logMessage);
 
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = StatusCodes.Status500InternalServerError;
