@@ -1,4 +1,4 @@
-﻿using OnlineStore.Api.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using Serilog.Core;
 
 namespace OnlineStore.Api.Middlewares;
@@ -31,11 +31,13 @@ public class GlobalExceptionHandlingMiddleware
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
-        ErrorResponse errorResponse = new()
+        ProblemDetails errorResponse = new()
         {
-            ErrorMessage = "Internal Server Error",
-            ErrorCode = StatusCodes.Status500InternalServerError
+            Title = "Internal Server Error",
+            Status = StatusCodes.Status500InternalServerError,
+            Detail = "An unexpected error occurred while processing the request."
         };
+      
         await context.Response.WriteAsJsonAsync(errorResponse);
     }
 }
