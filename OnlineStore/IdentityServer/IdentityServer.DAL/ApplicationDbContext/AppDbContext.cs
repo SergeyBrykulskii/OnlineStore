@@ -1,12 +1,11 @@
 ﻿using IdentityServer.DAL.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 namespace IdentityServer.DAL.ApplicationDbContext;
 
-public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
+public class AppDbContext : IdentityDbContext<User>
 {
     public AppDbContext(DbContextOptions options) : base(options)
     {

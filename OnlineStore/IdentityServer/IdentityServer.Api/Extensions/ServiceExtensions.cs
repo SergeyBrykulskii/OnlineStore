@@ -28,9 +28,7 @@ public static class ServiceExtensions
 
     public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
     {
-        var jwtSettings = configuration.GetSection("JwtSettings");
-        // TODO: move jwt key to environment variable
-        //var secretKey = Environment.GetEnvironmentVariable("SECRET");
+        var jwtSettings = configuration.GetSection("Jwt");
         var secretKey = jwtSettings.GetSection("JwtKey").Value;
 
         services.AddAuthentication(opt =>
@@ -47,7 +45,7 @@ public static class ServiceExtensions
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
                 ValidIssuer = jwtSettings.GetSection("ValidIssuer").Value,
-                ValidAudiences = jwtSettings.GetSection("ValidAudience").Get<string[]>(),
+                ValidAudiences = jwtSettings.GetSection("ValidAudiences").Get<string[]>(),
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!))
             };
         });
@@ -60,8 +58,8 @@ public static class ServiceExtensions
             options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
             {
                 In = ParameterLocation.Header,
-                Description = "Введите валидный токен",
-                Name = "Авторизация",
+                Description = "Enter valid token",
+                Name = "Authorization",
                 Type = SecuritySchemeType.Http,
                 BearerFormat = "JWT",
                 Scheme = "Bearer"

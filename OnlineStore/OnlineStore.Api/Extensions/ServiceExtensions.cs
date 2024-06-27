@@ -8,7 +8,7 @@ public static class ServiceExtensions
 {
     public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
     {
-        var jwtSettings = configuration.GetSection("JwtSettings");
+        var jwtSettings = configuration.GetSection("Jwt");
         // TODO: move jwt key to environment variable
         //var secretKey = Environment.GetEnvironmentVariable("SECRET");
         var secretKey = jwtSettings.GetSection("JwtKey").Value;
@@ -27,7 +27,7 @@ public static class ServiceExtensions
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
                 ValidIssuer = jwtSettings.GetSection("ValidIssuer").Value,
-                ValidAudiences = jwtSettings.GetSection("ValidAudience").Get<string[]>(),
+                ValidAudiences = jwtSettings.GetSection("ValidAudiences").Get<string[]>(),
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!))
             };
         });

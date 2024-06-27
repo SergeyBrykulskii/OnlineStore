@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
-using IdentityServer.Application.Models.DTOs;
+using IdentityServer.Application.Enums;
+using IdentityServer.Application.Models.DTOs.TokenDTOs;
+using IdentityServer.Application.Models.DTOs.UserDTOs;
 using IdentityServer.Application.Models.Result;
+using IdentityServer.Application.Resources;
+using IdentityServer.Application.Services.Interfaces;
 using IdentityServer.DAL.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 
 namespace IdentityServer.Application.Services;
 
@@ -15,26 +15,16 @@ public class AuthService : IAuthService
 {
     private readonly IMapper _mapper;
     private readonly UserManager<User> _userManager;
-    private readonly IConfiguration _configuration;
-
-    private User _user;
+    private readonly ITokenService _tokenService;
 
     public AuthService(
         IMapper mapper,
         UserManager<User> userManager,
-        IConfiguration configuration)
+        ITokenService tokenService)
     {
         _mapper = mapper;
         _userManager = userManager;
-        _configuration = configuration;
-    }
-
-    public async Task<string> CreateToken()
-    {
-        var signingCredentials = GetSigningCredentials();
-        var claims = await GetClaims();
-        var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
-        return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+        _tokenService = tokenService;
     }
 
     public async Task<BaseResult<UserDto>> Register(UserRegistrationDto userRegistrationDto)
@@ -56,10 +46,12 @@ public class AuthService : IAuthService
             {
                 return new BaseResult<UserDto>()
                 {
-                    ErrorMessage = "Unknown error"
+                    ErrorMessage = ErrorMessage.InternalServerError,
+                    ErrorCode = (int)ErrorCodes.InternalServerError
                 };
             }
         }
+
         await _userManager.AddToRolesAsync(user, userRegistrationDto.Roles);
 
         return new BaseResult<UserDto>()
@@ -68,70 +60,60 @@ public class AuthService : IAuthService
         };
     }
 
-    public async Task<BaseResult> ValidateUser(UserAuthenticationDto userAuthDto)
+    public async Task<BaseResult<TokenDto>> Login(UserAuthenticationDto userAuthDto)
     {
-        _user = await _userManager.FindByNameAsync(userAuthDto.UserName);
+        User user = await _userManager.FindByNameAsync(userAuthDto.UserName);
 
-        if (_user == null)
+        if (user == null)
         {
-            return new BaseResult()
+            return new BaseResult<TokenDto>()
             {
-                ErrorMessage = "User not found",
-
+                ErrorMessage = ErrorMessage.UserNotFound,
+                ErrorCode = (int)ErrorCodes.UserNotFound
             };
         }
-        bool isPasswordCorrect = await _userManager.CheckPasswordAsync(_user, userAuthDto.Password);
+
+        bool isPasswordCorrect = await _userManager.CheckPasswordAsync(user, userAuthDto.Password);
+
         if (!isPasswordCorrect)
         {
-            return new BaseResult()
+            return new BaseResult<TokenDto>()
             {
-                ErrorMessage = "Incorrect password"
+                ErrorMessage = ErrorMessage.IncorrectPassword,
+                ErrorCode = (int)ErrorCodes.IncorrectPassword
             };
         }
 
-        return new BaseResult();
+        var newAccessToken = _tokenService.GenerateAccessToken(await GetClaims(user));
+        var newRefreshToken = _tokenService.GenerateRefreshToken();
+
+        user.RefreshToken = newRefreshToken;
+        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(1);
+
+        await _userManager.UpdateAsync(user);
+
+        return new BaseResult<TokenDto>()
+        {
+            Data = new TokenDto
+            {
+                AccessToken = newAccessToken,
+                RefreshToken = newRefreshToken,
+            }
+        };
     }
 
-    private SigningCredentials GetSigningCredentials()
-    {
-        var key = Encoding.UTF8.GetBytes(_configuration.GetValue<string>("JwtSettings:JwtKey"));
-        var secret = new SymmetricSecurityKey(key);
-        return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
-    }
-
-    private async Task<List<Claim>> GetClaims()
+    private async Task<List<Claim>> GetClaims(User user)
     {
         var claims = new List<Claim>
         {
-            new(ClaimTypes.Name, _user.UserName)
+            new(ClaimTypes.Name, user.UserName)
         };
-        var roles = await _userManager.GetRolesAsync(_user);
+        var roles = await _userManager.GetRolesAsync(user);
 
         foreach (var role in roles)
         {
             claims.Add(new Claim(ClaimTypes.Role, role));
         }
         return claims;
-    }
-
-    private JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, List<Claim> claims)
-    {
-        var jwtSettings = _configuration.GetSection("JwtSettings");
-        var validAudiences = jwtSettings.GetSection("ValidAudience").Get<string[]>();
-
-        foreach (var audience in validAudiences)
-        {
-            claims.Add(new Claim("aud", audience));
-        }
-
-        var tokenOptions = new JwtSecurityToken
-        (
-            issuer: jwtSettings.GetSection("ValidIssuer").Value,
-            audience: string.Empty,
-            claims: claims,
-            expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings.GetSection("Expires").Value)),
-            signingCredentials: signingCredentials
-        );
-        return tokenOptions;
     }
 }

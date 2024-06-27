@@ -1,21 +1,18 @@
 using IdentityServer.Api.Extensions;
-using IdentityServer.Application.Services;
-using IdentityServer.DAL.ApplicationDbContext;
-using Microsoft.EntityFrameworkCore;
-using System.Reflection;
+using IdentityServer.Application.DependencyInjection;
+using IdentityServer.Application.Settings;
+using IdentityServer.DAL.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(JwtSettings.DefaultSection));
 
 builder.Services.ConfigureSwagger();
 builder.Services.ConfigureIdentity();
 builder.Services.ConfigureJWT(builder.Configuration);
 
-builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddDbContext<AppDbContext>(options =>
-{
-    options.UseNpgsql(builder.Configuration.GetConnectionString("PostrgeSql"));
-});
+builder.Services.AddApplicationLayer();
+builder.Services.AddDataAccessLayer(builder.Configuration);
 
 builder.Services.AddControllers();
 
