@@ -33,17 +33,6 @@ public class OrderProductService : IOrderProductService
 
     public async Task<BaseResult<CreateOrderProductDto>> AddProductToOrderAsync(CreateOrderProductDto orderProductItem)
     {
-        var validationResult = await _createOrderProductDtoValidator.ValidateAsync(orderProductItem);
-
-        if (validationResult.Errors.Count != 0)
-        {
-            return new BaseResult<CreateOrderProductDto>
-            {
-                ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage,
-                ErrorCode = (int)ErrorCodes.ValidationError
-            };
-        }
-
         var orderProduct = _mapper.Map<OrderProduct>(orderProductItem);
         await _orderProductRepository.CreateAsync(orderProduct);
 
@@ -52,17 +41,6 @@ public class OrderProductService : IOrderProductService
 
     public async Task<BaseResult<UpdateOrderProductDto>> UpdateProductQuantityInOrderAsync(UpdateOrderProductDto orderProductItem)
     {
-        var validationResult = await _updateOrderProductDtoValidator.ValidateAsync(orderProductItem);
-
-        if (validationResult.Errors.Count != 0)
-        {
-            return new BaseResult<UpdateOrderProductDto>
-            {
-                ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage,
-                ErrorCode = (int)ErrorCodes.ValidationError
-            };
-        }
-
         var orderProductById = await _orderProductRepository.GetByIdAsync(orderProductItem.Id);
 
         if (orderProductById == null)

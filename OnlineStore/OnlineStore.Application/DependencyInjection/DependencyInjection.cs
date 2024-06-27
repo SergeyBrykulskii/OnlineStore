@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 using OnlineStore.Application.Services.Implementations;
 using OnlineStore.Application.Services.Interfaces;
@@ -11,6 +12,8 @@ public static class DependencyInjection
 {
     public static void AddApplicationLayer(this IServiceCollection services)
     {
+        services.AddFluentValidation();
+
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
         services.AddValidatorsFromAssemblyContaining<ProductDtoValidator>();
