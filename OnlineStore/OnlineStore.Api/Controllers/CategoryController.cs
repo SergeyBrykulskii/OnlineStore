@@ -1,92 +1,87 @@
 using Microsoft.AspNetCore.Mvc;
 using OnlineStore.Application.DTOs.CategoryDTOs;
-using OnlineStore.Application.Services.Interfaces;
 using OnlineStore.Application.Result;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Threading;
+using OnlineStore.Application.Services.Interfaces;
 
-namespace OnlineStore.API.Controllers
+namespace OnlineStore.API.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class CategoryController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class CategoryController : ControllerBase
+    private readonly ICategoryService _categoryService;
+
+    public CategoryController(ICategoryService categoryService)
     {
-        private readonly ICategoryService _categoryService;
+        _categoryService = categoryService;
+    }
 
-        public CategoryController(ICategoryService categoryService)
+    [HttpGet]
+    public async Task<ActionResult<CollectionResult<CategoryDto>>> GetCategories()
+    {
+        var categoryServiceResponse = await _categoryService.GetAllCategoriesAsync();
+
+        if (categoryServiceResponse.IsSuccess)
         {
-            _categoryService = categoryService;
+            return Ok(categoryServiceResponse);
         }
 
-        [HttpGet]
-        public async Task<ActionResult<CollectionResult<CategoryDto>>> GetCategories()
+        return BadRequest(categoryServiceResponse);
+    }
+
+    [HttpGet(nameof(id))]
+    public async Task<ActionResult<BaseResult<CategoryDto>>> GetCategory(long id)
+    {
+        var categoryServiceResponse = await _categoryService.GetCategoryByIdAsync(id);
+
+        if (categoryServiceResponse.IsSuccess)
         {
-            var result = await _categoryService.GetAllCategoriesAsync();
-
-            if (result == null || result.Data == null)
-            {
-                return NotFound(new { Message = "Categories not found." });
-            }
-
-            return Ok(result);
+            return Ok(categoryServiceResponse);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<BaseResult<CategoryDto>>> GetCategory(long id)
+        return BadRequest(categoryServiceResponse);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<BaseResult<CreateCategoryDto>>> CreateCategory(
+        [FromBody] CreateCategoryDto categoryDto)
+    {
+        var categoryServiceResponse = await _categoryService.CreateCategoryAsync(categoryDto);
+
+        if (categoryServiceResponse.IsSuccess)
         {
-            var result = await _categoryService.GetCategoryByIdAsync(id);
-
-            if (result.Data == null)
-            {
-                return NotFound(new { result.ErrorMessage });
-            }
-
-            return Ok(result);
+            return CreatedAtAction(nameof(GetCategory),
+                new { name = categoryDto.Name },
+                categoryServiceResponse.Data);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<BaseResult<CreateCategoryDto>>> CreateCategory([FromBody] CreateCategoryDto categoryDto)
+        return BadRequest(categoryServiceResponse);
+    }
+
+    [HttpPut]
+    public async Task<ActionResult<BaseResult<UpdateCategoryDto>>> UpdateCategory(
+        [FromBody] UpdateCategoryDto categoryDto)
+    {
+        var categoryServiceResponse = await _categoryService.UpdateCategoryAsync(categoryDto);
+
+        if (categoryServiceResponse.IsSuccess)
         {
-            var result = await _categoryService.CreateCategoryAsync(categoryDto);
-
-            if (result.Data == null)
-            {
-                return BadRequest(new { result.ErrorMessage });
-            }
-
-            return CreatedAtAction(nameof(GetCategory), new { name = categoryDto.Name }, result);
+            return Ok(categoryServiceResponse);
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<BaseResult<UpdateCategoryDto>>> UpdateCategory(long id, [FromBody] UpdateCategoryDto categoryDto, CancellationToken cancellationToken)
+        return BadRequest(categoryServiceResponse);
+    }
+
+    [HttpDelete(nameof(id))]
+    public async Task<ActionResult<BaseResult<long>>> DeleteCategory(long id)
+    {
+        var categoryServiceResponse = await _categoryService.DeleteCategoryAsync(id);
+
+        if (categoryServiceResponse.IsSuccess)
         {
-            if (id != categoryDto.Id)
-            {
-                return BadRequest(new { Message = "ID mismatch." });
-            }
-
-            var result = await _categoryService.UpdateCategoryAsync(categoryDto);
-
-            if (result.Data == null)
-            {
-                return NotFound(new { result.ErrorMessage });
-            }
-
-            return Ok(result);
+            return Ok(categoryServiceResponse);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<BaseResult<long>>> DeleteCategory(long id)
-        {
-            var result = await _categoryService.DeleteCategoryAsync(id);
-
-            if (result.Data == 0)
-            {
-                return NotFound(new { result.ErrorMessage });
-            }
-
-            return Ok(result);
-        }
+        return BadRequest(categoryServiceResponse);
     }
 }
