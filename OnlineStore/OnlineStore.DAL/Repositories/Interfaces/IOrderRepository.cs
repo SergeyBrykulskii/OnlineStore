@@ -4,5 +4,5 @@ namespace OnlineStore.DAL.Repositories.Interfaces;
 
 public interface IOrderRepository : IRepository<Order>
 {
-    Task<IEnumerable<Order>> GetAllByUserAsync(User user, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Order>> GetAllByUserAsync(Guid userId, CancellationToken cancellationToken = default);
 }

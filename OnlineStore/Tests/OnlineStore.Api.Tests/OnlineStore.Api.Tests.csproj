@@ -26,8 +26,8 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\OnlineStore.Api\OnlineStore.Api.csproj" />
+  <ItemGroup>    
+	  <ProjectReference Include="..\..\OnlineStore.Api\OnlineStore.Api.csproj" />
   </ItemGroup>
 
 </Project>
