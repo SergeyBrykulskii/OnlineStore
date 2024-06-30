@@ -4,99 +4,98 @@ using OnlineStore.Application.DTOs.ProductDTOs;
 using OnlineStore.Application.Result;
 using OnlineStore.Application.Services.Interfaces;
 
-namespace OnlineStore.Api.Controllers
+namespace OnlineStore.Api.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class ProductController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ProductController : ControllerBase
+    private readonly IProductService _productService;
+    public ProductController(IProductService service)
     {
-        private readonly IProductService _productService;
-        public ProductController(IProductService service)
+        _productService = service;
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<CollectionResult<ProductDto>>> GetProducts()
+    {
+        var productServiceResponse = await _productService.GetAllProductsAsync();
+
+        if (productServiceResponse.IsSuccess)
         {
-            _productService = service;
+            return Ok(productServiceResponse);
         }
 
-        [HttpGet]
-        public async Task<ActionResult<CollectionResult<ProductDto>>> GetProducts()
+        return BadRequest(productServiceResponse);
+    }
+
+    [HttpGet(nameof(id))]
+    public async Task<ActionResult<BaseResult<CategoryDto>>> GetProduct(long id)
+    {
+        var productServiceResponse = await _productService.GetProductByIdAsync(id);
+
+        if (productServiceResponse.IsSuccess)
         {
-            var result = await _productService.GetAllProductsAsync();
-
-            if (result == null || result.Data == null)
-            {
-                return NotFound(new { Message = "Products not found." });
-            }
-
-            return Ok(result);
+            return Ok(productServiceResponse);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<BaseResult<CategoryDto>>> GetProduct(long id)
+        return BadRequest(productServiceResponse);
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<BaseResult<CategoryDto>>> GetProductsByCategory(long categoryId)
+    {
+        var productServiceResponse = await _productService.GetProductsByCategoryAsync(categoryId);
+
+        if (productServiceResponse.IsSuccess)
         {
-            var result = await _productService.GetProductByIdAsync(id);
-
-            if (result.Data == null)
-            {
-                return NotFound(new { result.ErrorMessage });
-            }
-
-            return Ok(result);
+            return Ok(productServiceResponse);
         }
 
-        [HttpGet()]
-        public async Task<ActionResult<BaseResult<CategoryDto>>> GetProductsByCategory(long categoryId)
+        return BadRequest(productServiceResponse);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<BaseResult<CreateProductDto>>> CreateProduct(
+        [FromBody] CreateProductDto productDto)
+    {
+        var productServiceResponse = await _productService.CreateProductAsync(productDto);
+
+        if (productServiceResponse.IsSuccess)
         {
-            var result = await _productService.GetProductsByCategoryAsync(categoryId);
-
-            if (result.Data == null)
-            {
-                return NotFound(new { result.ErrorMessage });
-            }
-
-            return Ok(result);
+            return CreatedAtAction(
+                nameof(CreateProduct),
+                new { name = productDto.Name },
+                productServiceResponse.Data);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<BaseResult<CreateProductDto>>> CreateProduct([FromBody] CreateProductDto productDto)
+        return BadRequest(productServiceResponse);
+    }
+
+    [HttpPut]
+    public async Task<ActionResult<BaseResult<UpdateProductDto>>> UpdateProduct(
+        [FromBody] UpdateProductDto productDto)
+    {
+        var productServiceResponse = await _productService.UpdateProductAsync(productDto);
+
+        if (productServiceResponse.IsSuccess)
         {
-            var result = await _productService.CreateProductAsync(productDto);
-
-            if (result.Data == null)
-            {
-                return BadRequest(new { result.ErrorMessage });
-            }
-
-            return CreatedAtAction(nameof(CreateProduct), new { name = productDto.Name }, result);
+            return Ok(productServiceResponse);
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<BaseResult<UpdateProductDto>>> UpdateProduct(long id, [FromBody] UpdateProductDto productDto, CancellationToken cancellationToken)
+        return BadRequest(productServiceResponse);
+    }
+
+    [HttpDelete(nameof(id))]
+    public async Task<ActionResult<BaseResult<long>>> DeleteProduct(long id)
+    {
+        var productServiceResponse = await _productService.DeleteProductAsync(id);
+
+        if (productServiceResponse.IsSuccess)
         {
-            if (id != productDto.Id)
-            {
-                return BadRequest(new { Message = "ID mismatch." });
-            }
-
-            var result = await _productService.UpdateProductAsync(productDto);
-
-            if (result.Data == null)
-            {
-                return NotFound(new { result.ErrorMessage });
-            }
-
-            return Ok(result);
+            return Ok(productServiceResponse);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<BaseResult<long>>> DeleteProduct(long id)
-        {
-            var result = await _productService.DeleteProductAsync(id);
-
-            if (result.Data == 0)
-            {
-                return NotFound(new { result.ErrorMessage });
-            }
-
-            return Ok(result);
-        }
+        return BadRequest(productServiceResponse);
     }
 }
