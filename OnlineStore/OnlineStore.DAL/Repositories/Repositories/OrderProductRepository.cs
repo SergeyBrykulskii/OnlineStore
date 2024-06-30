@@ -12,7 +12,7 @@ public class OrderProductRepository : BaseRepository<OrderProduct>, IOrderProduc
 
     public async Task<IEnumerable<OrderProduct>> GetByOrderAsync(Order order, CancellationToken cancellationToken = default)
     {
-        return await _context.OrderProducts.AsNoTracking().Include(c => c.Product)
+        return await _context.OrderProducts.AsNoTracking()
                               .Where(p => p.OrderId == order.Id)
                               .ToListAsync(cancellationToken);
     }
