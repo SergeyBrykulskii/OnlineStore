@@ -1,3 +1,4 @@
+using OnlineStore.Api.ActionFilters;
 using OnlineStore.Api.Middlewares;
 using OnlineStore.Application.DependencyInjection;
 using OnlineStore.DAL.DependencyInjection;
@@ -10,6 +11,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddApplicationLayer();
 builder.Services.AddDataAccessLayer(builder.Configuration);
+builder.Services.AddScoped<ValidationFilterAttribute>();
 
 var configuration = new ConfigurationBuilder()
         .SetBasePath(Directory.GetCurrentDirectory())

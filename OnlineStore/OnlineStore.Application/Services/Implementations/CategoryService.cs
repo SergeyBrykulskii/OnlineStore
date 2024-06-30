@@ -57,17 +57,6 @@ public class CategoryService : ICategoryService
 
     public async Task<BaseResult<CreateCategoryDto>> CreateCategoryAsync(CreateCategoryDto categoryDto)
     {
-        var validationResult = await _createCategoryDtoValidator.ValidateAsync(categoryDto);
-
-        if (validationResult.Errors.Count != 0)
-        {
-            return new BaseResult<CreateCategoryDto>
-            {
-                ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage,
-                ErrorCode = (int)ErrorCodes.ValidationError
-            };
-        }
-
         var category = _mapper.Map<Category>(categoryDto);
         await _categoryRepository.CreateAsync(category);
 
@@ -76,17 +65,6 @@ public class CategoryService : ICategoryService
 
     public async Task<BaseResult<UpdateCategoryDto>> UpdateCategoryAsync(UpdateCategoryDto categoryDto)
     {
-        var validationResult = await _updateCategoryDtoValidator.ValidateAsync(categoryDto);
-
-        if (validationResult.Errors.Count != 0)
-        {
-            return new BaseResult<UpdateCategoryDto>
-            {
-                ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage,
-                ErrorCode = (int)ErrorCodes.ValidationError
-            };
-        }
-
         var categoryById = await _categoryRepository.GetByIdAsync(categoryDto.Id);
 
         if (categoryById == null)

@@ -1,5 +1,7 @@
 ﻿using FluentValidation;
 using OnlineStore.Application.DTOs.CategoryDTOs;
+using OnlineStore.Application.Enums;
+using OnlineStore.Application.Resources;
 
 namespace OnlineStore.Application.Validations.CategoryDTOsValidators;
 
@@ -8,10 +10,10 @@ public class CategoryDtoValidator : AbstractValidator<CategoryDto>
     public CategoryDtoValidator()
     {
         RuleFor(c => c.Id)
-            .NotEmpty().WithMessage("Category id should not be empty");
+            .NotNull().WithMessage(ErrorMessage.NullId).WithErrorCode(ErrorCodes.ValidationError.ToString());
         RuleFor(c => c.Name)
-            .NotEmpty().WithMessage("Category name should not be empty");
+            .NotEmpty().WithMessage(ErrorMessage.EmptyField).WithErrorCode(ErrorCodes.ValidationError.ToString());
         RuleFor(c => c.Name)
-            .MaximumLength(100).WithMessage("Category name is too long");
+            .MaximumLength(100).WithMessage(ErrorMessage.LongName).WithErrorCode(ErrorCodes.ValidationError.ToString());
     }
 }

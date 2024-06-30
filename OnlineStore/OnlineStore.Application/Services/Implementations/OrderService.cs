@@ -65,17 +65,6 @@ public class OrderService : IOrderService
 
     public async Task<BaseResult<CreateOrderDto>> CreateOrderAsync(CreateOrderDto orderDto)
     {
-        var validationResult = await _createOrderDtoValidator.ValidateAsync(orderDto);
-
-        if (validationResult.Errors.Count != 0)
-        {
-            return new BaseResult<CreateOrderDto>
-            {
-                ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage,
-                ErrorCode = (int)ErrorCodes.ValidationError
-            };
-        }
-
         var order = _mapper.Map<Order>(orderDto);
         await _orderRepository.CreateAsync(order);
 
@@ -84,17 +73,6 @@ public class OrderService : IOrderService
 
     public async Task<BaseResult<OrderDto>> UpdateOrderAsync(OrderDto orderDto)
     {
-        var validationResult = await _orderDtoValidator.ValidateAsync(orderDto);
-
-        if (validationResult.Errors.Count != 0)
-        {
-            return new BaseResult<OrderDto>
-            {
-                ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage,
-                ErrorCode = (int)ErrorCodes.ValidationError
-            };
-        }
-
         var orderById = await _orderRepository.GetByIdAsync(orderDto.Id);
 
         if (orderById == null)

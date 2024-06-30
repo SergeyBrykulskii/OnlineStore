@@ -34,17 +34,6 @@ public class ProductService : IProductService
 
     public async Task<BaseResult<CreateProductDto>> CreateProductAsync(CreateProductDto productDto)
     {
-        var validationResult = await _createProductDtoValidator.ValidateAsync(productDto);
-
-        if (validationResult.Errors.Count != 0)
-        {
-            return new BaseResult<CreateProductDto>
-            {
-                ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage,
-                ErrorCode = (int)ErrorCodes.ValidationError
-            };
-        }
-
         var product = _mapper.Map<Product>(productDto);
         await _productRepository.CreateAsync(product);
 
@@ -97,17 +86,6 @@ public class ProductService : IProductService
     }
     public async Task<BaseResult<UpdateProductDto>> UpdateProductAsync(UpdateProductDto productDto)
     {
-        var validationResult = await _updateProductDtoValidator.ValidateAsync(productDto);
-
-        if (validationResult.Errors.Count != 0)
-        {
-            return new BaseResult<UpdateProductDto>
-            {
-                ErrorMessage = validationResult.Errors.FirstOrDefault().ErrorMessage,
-                ErrorCode = (int)ErrorCodes.ValidationError
-            };
-        }
-
         var productById = await _productRepository.GetByIdAsync(productDto.Id);
 
         if (productById == null)
