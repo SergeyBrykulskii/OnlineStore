@@ -4,73 +4,70 @@ using OnlineStore.Application.DTOs.ProductDTOs;
 using OnlineStore.Application.Result;
 using OnlineStore.Application.Services.Interfaces;
 
-namespace OnlineStore.Api.Controllers
+namespace OnlineStore.Api.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class OrderProductController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class OrderProductController : ControllerBase
+    private readonly IOrderProductService _orderProductService;
+    public OrderProductController(IOrderProductService orderProductService)
     {
-        private readonly IOrderProductService _orderProductService;
-        public OrderProductController(IOrderProductService orderProductService)
+        _orderProductService = orderProductService;
+    }
+
+    [HttpGet(nameof(orderId))]
+    public async Task<ActionResult<CollectionResult<OrderProductDto>>> GetProductsInOrder(long orderId)
+    {
+        var orderProductServiceResponse = await _orderProductService.GetProductsByOrder(orderId);
+
+        if (orderProductServiceResponse.IsSuccess)
         {
-            _orderProductService = orderProductService;
+            return Ok(orderProductServiceResponse);
         }
 
-        [HttpGet]
-        public async Task<ActionResult<CollectionResult<OrderProductDto>>> GetProductsInOrder(long orderId)
+        return BadRequest(orderProductServiceResponse);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<BaseResult<CreateOrderProductDto>>> CreateOrderProduct(
+        [FromBody] CreateOrderProductDto orderProductDto)
+    {
+        var orderProductServiceResponse = await _orderProductService.AddProductToOrderAsync(orderProductDto);
+
+        if (orderProductServiceResponse.IsSuccess)
         {
-            var result = await _orderProductService.GetProductsByOrder(orderId);
-
-            if (result == null || result.Data == null)
-            {
-                return NotFound(new { result.ErrorMessage });
-            }
-
-            return Ok(result);
+            return Ok(orderProductServiceResponse);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<BaseResult<CreateOrderProductDto>>> CreateOrderProduct([FromBody] CreateOrderProductDto orderProductDto)
+        return BadRequest(orderProductServiceResponse);
+    }
+
+    [HttpPut]
+    public async Task<ActionResult<BaseResult<UpdateProductDto>>> UpdateOrderProduct(
+        [FromBody] UpdateOrderProductDto orderProductDto)
+    {
+        var orderProductServiceResponse =
+            await _orderProductService.UpdateProductQuantityInOrderAsync(orderProductDto);
+
+        if (orderProductServiceResponse.IsSuccess)
         {
-            var result = await _orderProductService.AddProductToOrderAsync(orderProductDto);
-
-            if (result.Data == null)
-            {
-                return BadRequest(new { result.ErrorMessage });
-            }
-
-            return CreatedAtAction(nameof(CreateOrderProduct), result);
+            return Ok(orderProductServiceResponse);
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<BaseResult<UpdateProductDto>>> UpdateOrderProduct(long id, [FromBody] UpdateOrderProductDto orderProductDto, CancellationToken cancellationToken)
+        return BadRequest(orderProductServiceResponse);
+    }
+
+    [HttpDelete(nameof(id))]
+    public async Task<ActionResult<BaseResult<long>>> DeleteOrderProduct(long id)
+    {
+        var orderProductServiceResponse = await _orderProductService.RemoveProductFromOrderAsync(id);
+
+        if (orderProductServiceResponse.IsSuccess)
         {
-            if (id != orderProductDto.Id)
-            {
-                return BadRequest(new { Message = "ID doessn't exist" });
-            }
-
-            var result = await _orderProductService.UpdateProductQuantityInOrderAsync(orderProductDto);
-
-            if (result.Data == null)
-            {
-                return NotFound(new { result.ErrorMessage });
-            }
-
-            return Ok(result);
+            return Ok(orderProductServiceResponse);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<BaseResult<long>>> DeleteOrderProduct(long id)
-        {
-            var result = await _orderProductService.RemoveProductFromOrderAsync(id);
-
-            if (result.Data == 0)
-            {
-                return NotFound(new { result.ErrorMessage });
-            }
-
-            return Ok(result);
-        }
+        return BadRequest(orderProductServiceResponse);
     }
 }
