@@ -51,7 +51,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<BaseResult<OrderDto>>> CreateOrder(CreateOrderDto orderDto)
+    public async Task<ActionResult<BaseResult<OrderDto>>> CreateOrder([FromBody] CreateOrderDto orderDto)
     {
         var orderServiceResponse = await _orderService.CreateOrderAsync(orderDto);
 
@@ -64,7 +64,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpPut]
-    public async Task<ActionResult<BaseResult<OrderDto>>> UpdateOrder(OrderDto orderDto)
+    public async Task<ActionResult<BaseResult<OrderDto>>> UpdateOrder([FromBody] OrderDto orderDto)
     {
         var orderServiceResponse = await _orderService.UpdateOrderAsync(orderDto);
 
