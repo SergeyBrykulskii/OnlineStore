@@ -3,7 +3,6 @@ using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 using OnlineStore.Application.Services.Implementations;
 using OnlineStore.Application.Services.Interfaces;
-using OnlineStore.Application.Validations.ProductDTOsValidators;
 using System.Reflection;
 
 namespace OnlineStore.Application.DependencyInjection;
@@ -16,7 +15,7 @@ public static class DependencyInjection
 
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-        services.AddValidatorsFromAssemblyContaining<ProductDtoValidator>();
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
         InitServices(services);
     }
