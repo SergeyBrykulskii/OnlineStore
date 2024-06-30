@@ -37,7 +37,7 @@ public class GlobalExceptionHandlingMiddleware
             Status = StatusCodes.Status500InternalServerError,
             Detail = "An unexpected error occurred while processing the request."
         };
-      
+
         await context.Response.WriteAsJsonAsync(errorResponse);
     }
 }
