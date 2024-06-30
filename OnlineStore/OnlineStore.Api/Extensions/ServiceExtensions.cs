@@ -25,8 +25,8 @@ public static class ServiceExtensions
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = jwtSettings.GetSection("ValidIssuer").Value,
-                ValidAudiences = jwtSettings.GetSection("ValidAudiences").Get<string[]>(),
+                ValidIssuer = jwtSettings.GetSection("Issuer").Value,
+                ValidAudiences = jwtSettings.GetSection("Audiences").Get<string[]>(),
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!))
             };
         });
