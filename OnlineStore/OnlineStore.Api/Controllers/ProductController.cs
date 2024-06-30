@@ -42,7 +42,7 @@ public class ProductController : ControllerBase
         return BadRequest(productServiceResponse);
     }
 
-    [HttpGet]
+    [HttpGet(nameof(categoryId))]
     public async Task<ActionResult<BaseResult<CategoryDto>>> GetProductsByCategory(long categoryId)
     {
         var productServiceResponse = await _productService.GetProductsByCategoryAsync(categoryId);
