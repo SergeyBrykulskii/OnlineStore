@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineStore.Application.DTOs.CategoryDTOs;
 using OnlineStore.Application.Result;
@@ -43,6 +44,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<BaseResult<CreateCategoryDto>>> CreateCategory(
         [FromBody] CreateCategoryDto categoryDto)
     {
@@ -59,6 +61,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPut]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<BaseResult<UpdateCategoryDto>>> UpdateCategory(
         [FromBody] UpdateCategoryDto categoryDto)
     {
@@ -73,6 +76,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpDelete(nameof(id))]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<BaseResult<long>>> DeleteCategory(long id)
     {
         var categoryServiceResponse = await _categoryService.DeleteCategoryAsync(id);
