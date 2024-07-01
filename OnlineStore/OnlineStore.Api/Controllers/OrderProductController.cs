@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineStore.Application.DTOs.OrderProductDTOs;
 using OnlineStore.Application.DTOs.ProductDTOs;
 using OnlineStore.Application.Result;
@@ -17,6 +18,7 @@ public class OrderProductController : ControllerBase
     }
 
     [HttpGet(nameof(orderId))]
+    [Authorize]
     public async Task<ActionResult<CollectionResult<OrderProductDto>>> GetProductsInOrder(long orderId)
     {
         var orderProductServiceResponse = await _orderProductService.GetProductsByOrder(orderId);
@@ -30,6 +32,7 @@ public class OrderProductController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult<BaseResult<CreateOrderProductDto>>> CreateOrderProduct(
         [FromBody] CreateOrderProductDto orderProductDto)
     {
@@ -44,6 +47,7 @@ public class OrderProductController : ControllerBase
     }
 
     [HttpPut]
+    [Authorize]
     public async Task<ActionResult<BaseResult<UpdateProductDto>>> UpdateOrderProduct(
         [FromBody] UpdateOrderProductDto orderProductDto)
     {
@@ -59,6 +63,7 @@ public class OrderProductController : ControllerBase
     }
 
     [HttpDelete(nameof(id))]
+    [Authorize]
     public async Task<ActionResult<BaseResult<long>>> DeleteOrderProduct(long id)
     {
         var orderProductServiceResponse = await _orderProductService.RemoveProductFromOrderAsync(id);

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineStore.Application.DTOs.OrderDTOs;
 using OnlineStore.Application.Result;
@@ -18,6 +19,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<BaseResult<OrderDto>>> GetOrders()
     {
         var orders = await _orderService.GetAllOrdersAsync();
@@ -25,6 +27,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet(nameof(id))]
+    [Authorize]
     public async Task<ActionResult<BaseResult<OrderDetailDto>>> GetOrder(long id)
     {
         var orderServiceResponse = await _orderService.GetOrderByIdAsync(id);
@@ -38,6 +41,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet(nameof(userId))]
+    [Authorize]
     public async Task<ActionResult<BaseResult<OrderDto>>> GetOrdersByUser(Guid userId)
     {
         var orderServiceResponse = await _orderService.GetAllOrdersByUserAsync(userId);
@@ -51,6 +55,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult<BaseResult<OrderDto>>> CreateOrder([FromBody] CreateOrderDto orderDto)
     {
         var orderServiceResponse = await _orderService.CreateOrderAsync(orderDto);
@@ -64,6 +69,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpPut]
+    [Authorize]
     public async Task<ActionResult<BaseResult<OrderDto>>> UpdateOrder([FromBody] OrderDto orderDto)
     {
         var orderServiceResponse = await _orderService.UpdateOrderAsync(orderDto);
@@ -78,6 +84,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpDelete(nameof(id))]
+    [Authorize]
     public async Task<ActionResult<BaseResult<long>>> DeleteOrder(long id)
     {
         var orderServiceResponse = await _orderService.DeleteOrderAsync(id);

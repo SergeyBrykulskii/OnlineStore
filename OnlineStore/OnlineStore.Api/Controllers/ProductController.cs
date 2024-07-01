@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineStore.Application.DTOs.CategoryDTOs;
 using OnlineStore.Application.DTOs.ProductDTOs;
 using OnlineStore.Application.Result;
@@ -56,6 +57,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<BaseResult<CreateProductDto>>> CreateProduct(
         [FromBody] CreateProductDto productDto)
     {
@@ -73,6 +75,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPut]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<BaseResult<UpdateProductDto>>> UpdateProduct(
         [FromBody] UpdateProductDto productDto)
     {
@@ -87,6 +90,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpDelete(nameof(id))]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<BaseResult<long>>> DeleteProduct(long id)
     {
         var productServiceResponse = await _productService.DeleteProductAsync(id);
